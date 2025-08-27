@@ -1,0 +1,120 @@
+{
+  "header": {
+    "title": "AgriCalendar",
+    "subtitle": "Seu calendário completo de eventos do setor avícola mundial"
+  },
+  "loading": {
+    "title": "Carregando calendário...",
+    "subtitle": "Obtendo os últimos eventos do setor avícola"
+  },
+  "error": {
+    "title": "Erro ao carregar",
+    "retry": "Tentar novamente"
+  },
+  "search": {
+    "placeholder": "Buscar eventos..."
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": "Buscar eventos...",
+    "all": "Todos",
+    "allTypes": "Todos os tipos",
+    "allCountries": "Todos os países",
+    "year": "Ano",
+    "type": "Tipo de evento",
+    "region": "Região",
+    "language": "Idioma",
+    "clear": "Limpar filtros",
+    "noEvents": "Nenhum evento encontrado com os filtros selecionados."
+  },
+  "calendar": {
+    "title": "Calendário de Eventos",
+    "viewMonth": "Mês",
+    "viewWeek": "Semana",
+    "viewList": "Lista",
+    "today": "Hoje",
+    "noEvents": "Nenhum evento para mostrar",
+    "months": {
+      "january": "Janeiro",
+      "february": "Fevereiro",
+      "march": "Março",
+      "april": "Abril",
+      "may": "Maio",
+      "june": "Junho",
+      "july": "Julho",
+      "august": "Agosto",
+      "september": "Setembro",
+      "october": "Outubro",
+      "november": "Novembro",
+      "december": "Dezembro"
+    },
+    "days": {
+      "sunday": "Dom",
+      "monday": "Seg",
+      "tuesday": "Ter",
+      "wednesday": "Qua",
+      "thursday": "Qui",
+      "friday": "Sex",
+      "saturday": "Sáb"
+    }
+  },
+  "events": {
+    "upcoming": "Próximos Eventos Destacados",
+    "listTitle": "Lista de Eventos",
+    "viewAll": "Ver todos os eventos",
+    "viewDetails": "Ver detalhes",
+    "upcomingBadge": "Em breve",
+    "finishedBadge": "Finalizado",
+    "website": "Site oficial"
+  },
+  "navigation": {
+    "backToCalendar": "Voltar ao calendário",
+    "calendarView": "Calendário",
+    "listView": "Lista"
+  },
+  "eventDetails": {
+    "dates": "Datas",
+    "schedule": "Horário",
+    "location": "Localização",
+    "registration": "Registro",
+    "language": "Idioma",
+    "officialWebsite": "Site oficial",
+    "shareEvent": "Compartilhar evento",
+    "addToCalendar": "Adicionar ao calendário",
+    "information": "Informações do evento",
+    "noAdditionalInfo": "Não há informações adicionais disponíveis.",
+    "organizerInfo": "Informações do organizador",
+    "createdBy": "Criado por",
+    "username": "Usuário",
+    "relatedEvents": "Eventos relacionados",
+    "relatedEventsComingSoon": "Em breve mostraremos eventos relacionados."
+  },
+  "eventTypes": {
+    "conferencia": "Conferência",
+    "taller": "Workshop",
+    "seminario": "Seminário",
+    "webinar": "Webinar",
+    "feria": "Feira",
+    "exposicion": "Exposição",
+    "curso": "Curso",
+    "congreso": "Congresso"
+  },
+  "regions": {
+    "nacional": "Nacional",
+    "internacional": "Internacional",
+    "europa": "Europa",
+    "america": "América",
+    "asia": "Ásia",
+    "africa": "África",
+    "oceania": "Oceania"
+  },
+  "footer": {
+    "description": "A plataforma líder para eventos do setor avícola mundial. Mantenha-se atualizado com as últimas feiras, congressos e workshops.",
+    "links": "Links úteis",
+    "allEvents": "Todos os eventos",
+    "about": "Sobre nós",
+    "contact": "Contato",
+    "contactDescription": "Tem um evento para adicionar? Entre em contato para incluí-lo no calendário.",
+    "copyright": "Todos os direitos reservados."
+  }
+}

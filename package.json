@@ -1,0 +1,59 @@
+{
+  "name": "agricalendar-v2",
+  "version": "2.0.0",
+  "description": "Multilingual Agricultural Calendar Platform",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend-public",
+    "frontend-admin"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm run install:backend && npm run install:frontend-public && npm run install:frontend-admin",
+    "install:backend": "cd backend && npm install",
+    "install:frontend-public": "cd frontend-public && npm install",
+    "install:frontend-admin": "cd frontend-admin && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend-public\" \"npm run dev:frontend-admin\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend-public": "cd frontend-public && npm run dev",
+    "dev:frontend-admin": "cd frontend-admin && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend-public && npm run build:frontend-admin",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend-public": "cd frontend-public && npm run build",
+    "build:frontend-admin": "cd frontend-admin && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend-public\" \"npm run start:frontend-admin\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend-public": "cd frontend-public && npm start",
+    "start:frontend-admin": "cd frontend-admin && npm start",
+    "lint": "npm run lint:frontend-public && npm run lint:frontend-admin",
+    "lint:frontend-public": "cd frontend-public && npm run lint",
+    "lint:frontend-admin": "cd frontend-admin && npm run lint",
+    "db:setup": "cd backend && npx prisma migrate dev && npm run seed",
+    "db:reset": "cd backend && npx prisma migrate reset && npm run seed",
+    "db:studio": "cd backend && npx prisma studio",
+    "clean": "rm -rf node_modules && rm -rf backend/node_modules && rm -rf frontend-public/node_modules && rm -rf frontend-admin/node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agrinewsprog/agricalendar-v2.git"
+  },
+  "keywords": [
+    "agriculture",
+    "calendar",
+    "multilingual",
+    "i18n",
+    "nextjs",
+    "express",
+    "typescript",
+    "prisma"
+  ],
+  "author": "AgriNews Programming Team",
+  "license": "MIT"
+}

@@ -1,0 +1,113 @@
+{
+  "header": {
+    "title": "AgriCalendar",
+    "subtitle": "Your complete calendar of global poultry industry events"
+  },
+  "loading": {
+    "title": "Loading calendar...",
+    "subtitle": "Getting the latest poultry industry events"
+  },
+  "error": {
+    "title": "Loading error",
+    "retry": "Try again"
+  },
+  "filters": {
+    "search": "Search events...",
+    "all": "All",
+    "allTypes": "All types",
+    "allCountries": "All countries",
+    "year": "Year",
+    "type": "Event type",
+    "region": "Region",
+    "language": "Language",
+    "clear": "Clear filters",
+    "noEvents": "No events found with the selected filters."
+  },
+  "calendar": {
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "days": {
+      "sunday": "Sun",
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat"
+    }
+  },
+  "events": {
+    "upcoming": "Upcoming Featured Events",
+    "listTitle": "Events List",
+    "viewAll": "View all events",
+    "viewDetails": "View details",
+    "upcomingBadge": "Upcoming",
+    "finishedBadge": "Finished",
+    "website": "Official website"
+  },
+  "eventDetails": {
+    "dates": "Dates",
+    "schedule": "Schedule",
+    "location": "Location",
+    "registration": "Registration",
+    "language": "Language",
+    "information": "Event Information",
+    "noAdditionalInfo": "No additional information available.",
+    "organizerInfo": "Organizer Information",
+    "createdBy": "Created by",
+    "username": "Username",
+    "relatedEvents": "Related Events",
+    "relatedEventsComingSoon": "We will soon show similar events",
+    "officialWebsite": "Official Website",
+    "shareEvent": "Share Event",
+    "addToCalendar": "Add to Calendar"
+  },
+  "navigation": {
+    "backToCalendar": "Back to calendar",
+    "calendarView": "Calendar",
+    "listView": "List"
+  },
+  "search": {
+    "placeholder": "Search events..."
+  },
+  "eventTypes": {
+    "conferencia": "Conference",
+    "taller": "Workshop",
+    "seminario": "Seminar",
+    "webinar": "Webinar",
+    "feria": "Fair",
+    "exposicion": "Exhibition",
+    "curso": "Course",
+    "congreso": "Congress"
+  },
+  "regions": {
+    "nacional": "National",
+    "internacional": "International",
+    "europa": "Europe",
+    "america": "America",
+    "asia": "Asia",
+    "africa": "Africa",
+    "oceania": "Oceania"
+  },
+  "footer": {
+    "description": "The leading platform for global poultry industry events. Stay updated with the latest fairs, congresses and workshops.",
+    "links": "Useful links",
+    "allEvents": "All events",
+    "about": "About us",
+    "contact": "Contact",
+    "contactDescription": "Have an event to add? Contact us to include it in the calendar.",
+    "copyright": "All rights reserved."
+  }
+}

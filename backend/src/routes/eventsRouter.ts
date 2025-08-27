@@ -1,0 +1,31 @@
+import { Router } from 'express';
+import {
+  getAllEvents,
+  getEventBySlug,
+  createEvent,
+  updateEvent,
+  updateEventStatus,
+  deleteEvent,
+  updateEventTranslationById,
+  getEventTranslations
+} from '../controllers/eventsController';
+import { authenticateToken } from '../middlewares/authMiddleware';
+import upload from '../middlewares/uploadMiddleware';
+
+const router = Router();
+
+// Rutas públicas
+router.get('/', getAllEvents);
+router.get('/:slug', getEventBySlug);
+
+// Rutas protegidas (requieren autenticación)
+router.post('/', authenticateToken, upload.single('image'), createEvent);
+router.put('/:id', authenticateToken, upload.single('image'), updateEvent);
+router.patch('/:id/status', authenticateToken, updateEventStatus);
+router.delete('/:id', authenticateToken, deleteEvent);
+
+// Rutas de traducciones
+router.get('/:id/translations', authenticateToken, getEventTranslations);
+router.put('/:id/translation/:language', authenticateToken, updateEventTranslationById);
+
+export default router;

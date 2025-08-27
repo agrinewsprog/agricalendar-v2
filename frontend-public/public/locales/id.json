@@ -1,0 +1,120 @@
+{
+  "header": {
+    "title": "AgriCalendar",
+    "subtitle": "Kalender lengkap acara industri unggas dunia"
+  },
+  "loading": {
+    "title": "Memuat kalender...",
+    "subtitle": "Mengambil acara terbaru industri unggas"
+  },
+  "error": {
+    "title": "Gagal memuat",
+    "retry": "Coba lagi"
+  },
+  "navigation": {
+    "backToCalendar": "Kembali ke kalender",
+    "calendarView": "Kalender",
+    "listView": "Daftar"
+  },
+  "search": {
+    "placeholder": "Cari acara..."
+  },
+  "filters": {
+    "title": "Filter",
+    "search": "Cari acara...",
+    "all": "Semua",
+    "allTypes": "Semua jenis",
+    "allCountries": "Semua negara",
+    "year": "Tahun",
+    "type": "Jenis acara",
+    "region": "Wilayah",
+    "language": "Bahasa",
+    "clear": "Hapus filter",
+    "noEvents": "Tidak ditemukan acara dengan filter yang dipilih."
+  },
+  "calendar": {
+    "title": "Kalender Acara",
+    "viewMonth": "Bulan",
+    "viewWeek": "Minggu",
+    "viewList": "Daftar",
+    "today": "Hari ini",
+    "noEvents": "Tidak ada acara untuk ditampilkan",
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Maret",
+      "april": "April",
+      "may": "Mei",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "Agustus",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Desember"
+    },
+    "days": {
+      "sunday": "Min",
+      "monday": "Sen",
+      "tuesday": "Sel",
+      "wednesday": "Rab",
+      "thursday": "Kam",
+      "friday": "Jum",
+      "saturday": "Sab"
+    }
+  },
+  "events": {
+    "upcoming": "Acara Unggulan yang Akan Datang",
+    "listTitle": "Daftar Acara",
+    "viewAll": "Lihat semua acara",
+    "viewDetails": "Lihat detail",
+    "upcomingBadge": "Segera hadir",
+    "finishedBadge": "Selesai",
+    "website": "Situs web resmi"
+  },
+  "eventDetails": {
+    "dates": "Tanggal",
+    "schedule": "Jadwal",
+    "location": "Lokasi",
+    "registration": "Pendaftaran",
+    "language": "Bahasa",
+    "information": "Informasi Acara",
+    "noAdditionalInfo": "Tidak ada informasi tambahan tersedia.",
+    "organizerInfo": "Informasi Penyelenggara",
+    "createdBy": "Dibuat oleh",
+    "username": "Nama pengguna",
+    "relatedEvents": "Acara Terkait",
+    "relatedEventsComingSoon": "Kami akan segera menampilkan acara serupa",
+    "officialWebsite": "Situs Web Resmi",
+    "shareEvent": "Bagikan Acara",
+    "addToCalendar": "Tambahkan ke Kalender"
+  },
+  "eventTypes": {
+    "conferencia": "Konferensi",
+    "taller": "Workshop",
+    "seminario": "Seminar",
+    "webinar": "Webinar",
+    "feria": "Pameran",
+    "exposicion": "Eksibisi",
+    "curso": "Kursus",
+    "congreso": "Kongres"
+  },
+  "regions": {
+    "nacional": "Nasional",
+    "internacional": "Internasional",
+    "europa": "Eropa",
+    "america": "Amerika",
+    "asia": "Asia",
+    "africa": "Afrika",
+    "oceania": "Oseania"
+  },
+  "footer": {
+    "description": "Platform terdepan untuk acara industri unggas dunia. Tetap terkini dengan pameran, kongres, dan workshop terbaru.",
+    "links": "Tautan berguna",
+    "allEvents": "Semua acara",
+    "about": "Tentang kami",
+    "contact": "Kontak",
+    "contactDescription": "Punya acara yang ingin ditambahkan? Hubungi kami untuk memasukkannya ke dalam kalender.",
+    "copyright": "Semua hak dilindungi."
+  }
+}

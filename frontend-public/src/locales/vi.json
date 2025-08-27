@@ -1,0 +1,113 @@
+{
+  "header": {
+    "title": "AgriCalendar",
+    "subtitle": "Lịch sự kiện ngành gia cầm toàn cầu đầy đủ của bạn"
+  },
+  "loading": {
+    "title": "Đang tải lịch...",
+    "subtitle": "Đang lấy các sự kiện mới nhất của ngành gia cầm"
+  },
+  "error": {
+    "title": "Lỗi tải",
+    "retry": "Thử lại"
+  },
+  "navigation": {
+    "backToCalendar": "Quay lại lịch",
+    "calendarView": "Lịch",
+    "listView": "Danh sách"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm sự kiện..."
+  },
+  "filters": {
+    "search": "Tìm kiếm sự kiện...",
+    "all": "Tất cả",
+    "allTypes": "Tất cả loại",
+    "allCountries": "Tất cả quốc gia",
+    "year": "Năm",
+    "type": "Loại sự kiện",
+    "region": "Khu vực",
+    "language": "Ngôn ngữ",
+    "clear": "Xóa bộ lọc",
+    "noEvents": "Không tìm thấy sự kiện nào với bộ lọc đã chọn."
+  },
+  "calendar": {
+    "months": {
+      "january": "Tháng 1",
+      "february": "Tháng 2",
+      "march": "Tháng 3",
+      "april": "Tháng 4",
+      "may": "Tháng 5",
+      "june": "Tháng 6",
+      "july": "Tháng 7",
+      "august": "Tháng 8",
+      "september": "Tháng 9",
+      "october": "Tháng 10",
+      "november": "Tháng 11",
+      "december": "Tháng 12"
+    },
+    "days": {
+      "sunday": "CN",
+      "monday": "T2",
+      "tuesday": "T3",
+      "wednesday": "T4",
+      "thursday": "T5",
+      "friday": "T6",
+      "saturday": "T7"
+    }
+  },
+  "events": {
+    "upcoming": "Sự kiện nổi bật sắp tới",
+    "listTitle": "Danh sách sự kiện",
+    "viewAll": "Xem tất cả sự kiện",
+    "viewDetails": "Xem chi tiết",
+    "upcomingBadge": "Sắp tới",
+    "finishedBadge": "Đã kết thúc",
+    "website": "Trang web chính thức"
+  },
+  "eventDetails": {
+    "dates": "Ngày",
+    "schedule": "Lịch trình",
+    "location": "Địa điểm",
+    "registration": "Đăng ký",
+    "language": "Ngôn ngữ",
+    "information": "Thông tin sự kiện",
+    "noAdditionalInfo": "Không có thông tin bổ sung.",
+    "organizerInfo": "Thông tin ban tổ chức",
+    "createdBy": "Được tạo bởi",
+    "username": "Tên người dùng",
+    "relatedEvents": "Sự kiện liên quan",
+    "relatedEventsComingSoon": "Chúng tôi sẽ sớm hiển thị các sự kiện tương tự",
+    "officialWebsite": "Trang web chính thức",
+    "shareEvent": "Chia sẻ sự kiện",
+    "addToCalendar": "Thêm vào lịch"
+  },
+  "eventTypes": {
+    "conferencia": "Hội nghị",
+    "taller": "Hội thảo",
+    "seminario": "Seminář",
+    "webinar": "Webinar",
+    "feria": "Hội chợ",
+    "exposicion": "Triển lãm",
+    "curso": "Khóa học",
+    "congreso": "Đại hội"
+  },
+  "regions": {
+    "nacional": "Quốc gia",
+    "internacional": "Quốc tế",
+    "europa": "Châu Âu",
+    "america": "Châu Mỹ",
+    "asia": "Châu Á",
+    "africa": "Châu Phi",
+    "oceania": "Châu Đại Dương"
+  },
+  "footer": {
+    "description": "Nền tảng hàng đầu cho các sự kiện ngành gia cầm toàn cầu. Cập nhật với các hội chợ, đại hội và hội thảo mới nhất.",
+    "links": "Liên kết hữu ích",
+    "allEvents": "Tất cả sự kiện",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "contactDescription": "Có sự kiện muốn thêm? Liên hệ với chúng tôi để đưa vào lịch.",
+    "copyright": "Tất cả quyền được bảo lưu."
+  }
+}

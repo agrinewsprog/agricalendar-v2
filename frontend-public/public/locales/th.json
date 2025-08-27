@@ -1,0 +1,120 @@
+{
+  "header": {
+    "title": "AgriCalendar",
+    "subtitle": "ปฏิทินกิจกรรมอุตสาหกรรมสัตว์ปีกทั่วโลกที่สมบูรณ์"
+  },
+  "loading": {
+    "title": "กำลังโหลดปฏิทิน...",
+    "subtitle": "กำลังโหลดกิจกรรมล่าสุดในอุตสาหกรรมสัตว์ปีก"
+  },
+  "error": {
+    "title": "เกิดข้อผิดพลาดในการโหลด",
+    "retry": "ลองใหม่"
+  },
+  "navigation": {
+    "backToCalendar": "กลับไปยังปฏิทิน",
+    "calendarView": "ปฏิทิน",
+    "listView": "รายการ"
+  },
+  "search": {
+    "placeholder": "ค้นหากิจกรรม..."
+  },
+  "filters": {
+    "title": "ตัวกรอง",
+    "search": "ค้นหากิจกรรม...",
+    "all": "ทั้งหมด",
+    "allTypes": "ทุกประเภท",
+    "allCountries": "ทุกประเทศ",
+    "year": "ปี",
+    "type": "ประเภทกิจกรรม",
+    "region": "ภูมิภาค",
+    "language": "ภาษา",
+    "clear": "ล้างตัวกรอง",
+    "noEvents": "ไม่พบกิจกรรมที่ตรงกับตัวกรองที่เลือก"
+  },
+  "calendar": {
+    "title": "ปฏิทินกิจกรรม",
+    "viewMonth": "เดือน",
+    "viewWeek": "สัปดาห์",
+    "viewList": "รายการ",
+    "today": "วันนี้",
+    "noEvents": "ไม่มีกิจกรรมที่จะแสดง",
+    "months": {
+      "january": "มกราคม",
+      "february": "กุมภาพันธ์",
+      "march": "มีนาคม",
+      "april": "เมษายน",
+      "may": "พฤษภาคม",
+      "june": "มิถุนายน",
+      "july": "กรกฎาคม",
+      "august": "สิงหาคม",
+      "september": "กันยายน",
+      "october": "ตุลาคม",
+      "november": "พฤศจิกายน",
+      "december": "ธันวาคม"
+    },
+    "days": {
+      "sunday": "อา",
+      "monday": "จ",
+      "tuesday": "อ",
+      "wednesday": "พ",
+      "thursday": "พฤ",
+      "friday": "ศ",
+      "saturday": "ส"
+    }
+  },
+  "events": {
+    "upcoming": "กิจกรรมที่น่าสนใจที่จะมาถึง",
+    "listTitle": "รายการกิจกรรม",
+    "viewAll": "ดูกิจกรรมทั้งหมด",
+    "viewDetails": "ดูรายละเอียด",
+    "upcomingBadge": "กำลังจะมาถึง",
+    "finishedBadge": "จบแล้ว",
+    "website": "เว็บไซต์อย่างเป็นทางการ"
+  },
+  "eventDetails": {
+    "dates": "วันที่",
+    "schedule": "กำหนดการ",
+    "location": "สถานที่",
+    "registration": "การลงทะเบียน",
+    "language": "ภาษา",
+    "information": "ข้อมูลงาน",
+    "noAdditionalInfo": "ไม่มีข้อมูลเพิ่มเติม",
+    "organizerInfo": "ข้อมูลผู้จัดงาน",
+    "createdBy": "สร้างโดย",
+    "username": "ชื่อผู้ใช้",
+    "relatedEvents": "งานที่เกี่ยวข้อง",
+    "relatedEventsComingSoon": "เร็วๆ นี้เราจะแสดงงานที่คล้ายกัน",
+    "officialWebsite": "เว็บไซต์อย่างเป็นทางการ",
+    "shareEvent": "แชร์งาน",
+    "addToCalendar": "เพิ่มในปฏิทิน"
+  },
+  "eventTypes": {
+    "conferencia": "การประชุม",
+    "taller": "การอบรม",
+    "seminario": "การสัมมนา",
+    "webinar": "เว็บบินาร์",
+    "feria": "งานแสดงสินค้า",
+    "exposicion": "นิทรรศการ",
+    "curso": "หลักสูตร",
+    "congreso": "การประชุมใหญ่"
+  },
+  "regions": {
+    "nacional": "ประเทศ",
+    "internacional": "นานาชาติ",
+    "europa": "ยุโรป",
+    "america": "อเมริกา",
+    "asia": "เอเชีย",
+    "africa": "แอฟริกา",
+    "oceania": "โอเชียเนีย"
+  },
+  "footer": {
+    "description": "แพลตฟอร์มชั้นนำสำหรับกิจกรรมในอุตสาหกรรมสัตว์ปีกทั่วโลก ติดตามข่าวสารล่าสุดเกี่ยวกับงานแสดงสินค้า การประชุม และการอบรม",
+    "links": "ลิงก์ที่เป็นประโยชน์",
+    "allEvents": "กิจกรรมทั้งหมด",
+    "about": "เกี่ยวกับเรา",
+    "contact": "ติดต่อ",
+    "contactDescription": "มีกิจกรรมที่ต้องการเพิ่ม? ติดต่อเราเพื่อนำเข้าสู่ปฏิทิน",
+    "copyright": "สงวนลิขสิทธิ์ทั้งหมด"
+  }
+}
