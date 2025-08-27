@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   basePath: process.env.NODE_ENV === 'production' ? '/admin' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/admin' : '',
   trailingSlash: true,
-  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
