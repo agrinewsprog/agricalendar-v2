@@ -69,10 +69,20 @@ dataLines.forEach((line) => {
       }
     }
 
-    // Limpiar strings problemáticos
-    name = name.replace(/[\\]/g, "").substring(0, 100);
-    location = location.replace(/[\\]/g, "").substring(0, 100);
-    description = description.replace(/[\\]/g, "").substring(0, 200);
+    // Limpiar strings problemáticos y escapar comillas
+    name = name.replace(/[\\]/g, "").replace(/'/g, "''").substring(0, 100);
+    location = location
+      .replace(/[\\]/g, "")
+      .replace(/'/g, "''")
+      .substring(0, 100);
+    description = description
+      .replace(/[\\]/g, "")
+      .replace(/'/g, "''")
+      .substring(0, 200);
+    image = image.replace(/'/g, "''");
+    startTime = startTime.replace(/'/g, "''");
+    endTime = endTime.replace(/'/g, "''");
+    color = color.replace(/'/g, "''");
 
     // Generar slug simple
     let slug = `evento-${id}`;
