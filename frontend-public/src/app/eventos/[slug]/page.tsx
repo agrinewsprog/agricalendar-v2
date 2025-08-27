@@ -17,15 +17,16 @@ import { useLanguage } from "@/context/useLanguage";
 import { useState, useEffect } from "react";
 
 interface EventPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function EventPage({ params }: EventPageProps) {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [resolvedParams, setResolvedParams] = useState<{ slug: string } | null>(null);
   const {
     language,
     setLanguage,
@@ -34,11 +35,21 @@ export default function EventPage({ params }: EventPageProps) {
   } = useLanguage();
 
   useEffect(() => {
+    async function resolveParams() {
+      const resolved = await params;
+      setResolvedParams(resolved);
+    }
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
     async function getEvent() {
+      if (!resolvedParams) return;
+      
       try {
         setLoading(true);
         setError(null);
-        const response = await eventsService.getBySlug(params.slug, language);
+        const response = await eventsService.getBySlug(resolvedParams.slug, language);
         if (response.success) {
           setEvent(response.data);
         } else {
@@ -53,7 +64,7 @@ export default function EventPage({ params }: EventPageProps) {
     }
 
     getEvent();
-  }, [params.slug, language]);
+  }, [resolvedParams, language]);
 
   if (loading || translationsLoading) {
     return (
