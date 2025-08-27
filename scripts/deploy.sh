@@ -2,31 +2,34 @@
 
 echo "🚀 Deploying AgriCalendar..."
 
+# Get the script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+cd "$PROJECT_ROOT"
+
 # Pull latest changes
 git pull origin main
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-cd backend && npm install --production && cd ..
-cd frontend-public && npm install --production && cd ..
-cd frontend-admin && npm install --production && cd ..
+cd "$PROJECT_ROOT/backend" && npm install --production
+cd "$PROJECT_ROOT/frontend-public" && npm install --production  
+cd "$PROJECT_ROOT/frontend-admin" && npm install --production
 
 # Build applications
 echo "🔨 Building applications..."
-cd frontend-public && npm run build && cd ..
-cd frontend-admin && npm run build && cd ..
-cd backend && npm run build && cd ..
+cd "$PROJECT_ROOT/frontend-public" && npm run build
+cd "$PROJECT_ROOT/frontend-admin" && npm run build
+cd "$PROJECT_ROOT/backend" && npm run build
 
 # Run database migrations
 echo "🗄️ Running database migrations..."
-cd backend && npx prisma migrate deploy && cd ..
+cd "$PROJECT_ROOT/backend" && npx prisma migrate deploy
 
 # Restart PM2 processes
 echo "🔄 Restarting services..."
-pm2 restart ecosystem.config.js
-
-# Optional: Seed database if needed
-# cd backend && npm run seed && cd ..
+cd "$PROJECT_ROOT" && pm2 restart ecosystem.config.js
 
 echo "✅ Deployment completed!"
 echo "🌐 Site: https://agricalendar.net"
