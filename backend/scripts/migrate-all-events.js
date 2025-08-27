@@ -101,16 +101,23 @@ rows.forEach((row, index) => {
 
     // Convertir fechas DD-MM-YYYY → YYYY-MM-DD
     const convertDate = (dateStr) => {
-      if (!dateStr || dateStr === "''" || dateStr === "NULL") return "'2024-01-01'";
+      if (!dateStr || dateStr === "''" || dateStr === "NULL")
+        return "'2024-01-01'";
       const cleaned = dateStr.replace(/'/g, "");
       if (cleaned.includes("-")) {
         const parts = cleaned.split("-");
         if (parts.length === 3 && parts[0].length <= 2) {
           // DD-MM-YYYY format
-          return `'${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}'`;
+          return `'${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(
+            2,
+            "0"
+          )}'`;
         } else if (parts.length === 3 && parts[0].length === 4) {
           // Already YYYY-MM-DD format
-          return `'${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}'`;
+          return `'${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(
+            2,
+            "0"
+          )}'`;
         }
       }
       return "'2024-01-01'";
@@ -119,7 +126,11 @@ rows.forEach((row, index) => {
     // Generar slug único
     let slug = slugevento;
     if (!slug || slug === "''") {
-      const nameClean = name.replace(/'/g, "").toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+      const nameClean = name
+        .replace(/'/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
       slug = `'${nameClean}-${id.replace(/'/g, "")}'`;
     }
     if (!slug || slug === "''") {
@@ -130,7 +141,9 @@ rows.forEach((row, index) => {
       start_date
     )}, ${convertDate(
       end_date
-    )}, ${start_time}, ${end_time}, ${color}, ${location}, ${description}, ${state}, ${region}, ${tipo}, ${website}, ${slug}, 'PUBLISHED', ${idioma || 1}, 1, NOW(), NOW()) ON CONFLICT (slugevento) DO UPDATE SET name = EXCLUDED.name;
+    )}, ${start_time}, ${end_time}, ${color}, ${location}, ${description}, ${state}, ${region}, ${tipo}, ${website}, ${slug}, 'PUBLISHED', ${
+      idioma || 1
+    }, 1, NOW(), NOW()) ON CONFLICT (slugevento) DO UPDATE SET name = EXCLUDED.name;
 `;
   }
 });
