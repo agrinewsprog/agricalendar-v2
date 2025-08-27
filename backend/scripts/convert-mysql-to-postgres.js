@@ -174,8 +174,7 @@ SELECT setval(pg_get_serial_sequence('events', 'id'), (SELECT MAX(id) FROM event
 
 // Ejecutar conversión
 const inputFile = "C:\\Users\\Samuel\\Downloads\\events.sql";
-const outputFile =
-  "C:\\Users\\Samuel\\Desktop\\proyectos_github\\agricalendar-v2\\backend\\scripts\\events-postgres.sql";
+const outputFile = "./events-postgres-all.sql";
 
 try {
   convertMySQLToPostgreSQL(inputFile, outputFile);
