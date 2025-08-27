@@ -112,11 +112,13 @@ rows.forEach((row, index) => {
       return dateStr;
     };
 
-    postgresSQL += `INSERT INTO events (id, name, image, start_date, end_date, start_time, end_time, color, location, description, state, region, tipo, website, views, created_at, updated_at) VALUES (${id}, ${name}, ${image}, ${convertDate(
+    postgresSQL += `INSERT INTO events (id, name, image, start_date, end_date, start_time, end_time, color, location, description, state, region, tipo, website, slugevento, status, idioma, user_id, created_at, updated_at) VALUES (${id}, ${name}, ${image}, ${convertDate(
       start_date
     )}, ${convertDate(
       end_date
-    )}, ${start_time}, ${end_time}, ${color}, ${location}, ${description}, ${state}, ${region}, ${tipo}, ${website}, COALESCE(${views}, 0), NOW(), NOW());
+    )}, ${start_time}, ${end_time}, ${color}, ${location}, ${description}, ${state}, ${region}, ${tipo}, ${website}, ${
+      slugevento || `'evento-${id.replace(/'/g, "")}'`
+    }, 'PUBLISHED', ${idioma || 1}, 1, NOW(), NOW());
 `;
   }
 });
