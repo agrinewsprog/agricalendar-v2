@@ -17,7 +17,7 @@ console.log("Bloque INSERT encontrado");
 const valuesStart = insertBlock.indexOf("VALUES") + 6;
 const valuesSection = insertBlock.substring(valuesStart).trim();
 
-let sql = `-- Migración básica de eventos
+let sql = `-- Migración de eventos 2025+
 DELETE FROM events WHERE id > 0;
 
 `;
@@ -36,28 +36,37 @@ for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 
   const id = lineMatch[1];
 
-  // Buscar las fechas en formato DD-MM-YYYY usando la misma lógica del debug
+  // Buscar las fechas en formato DD-MM-YYYY
   const dateMatches = line.match(/'(\d{2}-\d{2}-\d{4})'/g);
   if (!dateMatches || dateMatches.length < 2) {
-    console.log(`Omitiendo evento ${id} - no se encontraron fechas válidas`);
-    continue;
+    continue; // Omitir sin mensaje (mayoría son eventos antiguos)
   }
 
   // Extraer fechas (quitar comillas)
   const startDate = dateMatches[0].replace(/'/g, "");
   const endDate = dateMatches[1].replace(/'/g, "");
 
+  // Verificar si es 2025+ antes de procesar más
+  const eventYear = parseInt(startDate.split("-")[2]);
+  if (eventYear < 2025) {
+    continue; // Omitir sin mensaje (mayoría son eventos antiguos)
+  }
+
   // Extraer nombre e imagen usando patrones más flexibles
   const nameMatch = line.match(
     /^\(\d+,\s*'([^']*(?:''[^']*)*)',\s*'([^']*(?:''[^']*)*)',/
   );
   if (!nameMatch) {
-    console.log(`Omitiendo evento ${id} - no se pudo extraer nombre/imagen`);
+    console.log(
+      `Omitiendo evento ${id} (${eventYear}) - no se pudo extraer nombre/imagen`
+    );
     continue;
   }
 
   const name = nameMatch[1];
   const image = nameMatch[2];
+
+  console.log(`✅ Procesando evento ${id}: ${name} (${startDate})`);
 
   // Validar fecha
   if (!startDate || startDate === "" || startDate.includes("00-00")) {
@@ -77,13 +86,6 @@ for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     }
   }
 
-  // Filtrar solo eventos de 2025 en adelante
-  const eventYear = parseInt(convertedStartDate.split("-")[0]);
-  if (eventYear < 2025) {
-    console.log(`Omitiendo evento ${id} - año ${eventYear} (solo 2025+)`);
-    continue;
-  }
-
   let convertedEndDate = endDate;
   if (endDate && endDate.includes("-") && endDate.length === 10) {
     const parts = endDate.split("-");
@@ -95,7 +97,7 @@ for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     }
   }
 
-  // Limpiar nombre
+  // Limpiar nombre e imagen para SQL
   const cleanName = name.replace(/'/g, "''").substring(0, 100);
   const cleanImage = image.replace(/'/g, "''");
   const slug = `evento-${id}`;
@@ -107,9 +109,10 @@ for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 }
 
 sql += `
+-- Actualizar secuencia
 SELECT setval(pg_get_serial_sequence('events', 'id'), (SELECT MAX(id) FROM events));
 `;
 
 fs.writeFileSync("./events-final.sql", sql);
 console.log(`✅ Archivo creado: events-final.sql`);
-console.log(`📊 Eventos procesados: ${eventCount}`);
+console.log(`📊 Eventos 2025+ procesados: ${eventCount}`);
