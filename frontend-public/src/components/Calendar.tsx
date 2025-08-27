@@ -6,7 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { Event } from "@/lib/api";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useLanguage } from "@/context/useLanguage";
 
 interface CalendarProps {
@@ -16,6 +16,7 @@ interface CalendarProps {
 export default function Calendar({ events }: CalendarProps) {
   const [currentView, setCurrentView] = useState("dayGridMonth");
   const { t, language } = useLanguage();
+  const calendarRef = useRef<FullCalendar>(null);
 
   // Mapeo de idiomas a rutas
   const LANGUAGE_ROUTES: Record<string, string> = {
@@ -66,6 +67,12 @@ export default function Calendar({ events }: CalendarProps) {
 
   const handleViewChange = (view: string) => {
     setCurrentView(view);
+
+    // Cambiar la vista del calendario usando la referencia
+    const calendarApi = calendarRef.current?.getApi();
+    if (calendarApi) {
+      calendarApi.changeView(view);
+    }
   };
 
   return (
@@ -115,6 +122,7 @@ export default function Calendar({ events }: CalendarProps) {
       {/* FullCalendar */}
       <div className="p-4">
         <FullCalendar
+          ref={calendarRef}
           plugins={[
             dayGridPlugin,
             timeGridPlugin,

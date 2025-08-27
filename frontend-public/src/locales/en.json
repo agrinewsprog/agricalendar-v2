@@ -24,6 +24,12 @@
     "noEvents": "No events found with the selected filters."
   },
   "calendar": {
+    "title": "Events Calendar",
+    "viewMonth": "Month",
+    "viewWeek": "Week",
+    "viewList": "List",
+    "today": "Today",
+    "noEvents": "No scheduled events",
     "months": {
       "january": "January",
       "february": "February",

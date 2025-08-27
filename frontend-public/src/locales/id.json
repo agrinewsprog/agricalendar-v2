@@ -32,6 +32,12 @@
     "noEvents": "Tidak ada acara yang ditemukan dengan filter yang dipilih."
   },
   "calendar": {
+    "title": "Kalender Acara",
+    "viewMonth": "Bulan",
+    "viewWeek": "Minggu",
+    "viewList": "Daftar",
+    "today": "Hari ini",
+    "noEvents": "Tidak ada acara yang dijadwalkan",
     "months": {
       "january": "Januari",
       "february": "Februari",

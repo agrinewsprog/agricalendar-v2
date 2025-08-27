@@ -32,6 +32,12 @@
     "noEvents": "Không tìm thấy sự kiện nào với bộ lọc đã chọn."
   },
   "calendar": {
+    "title": "Lịch sự kiện",
+    "viewMonth": "Tháng",
+    "viewWeek": "Tuần",
+    "viewList": "Danh sách",
+    "today": "Hôm nay",
+    "noEvents": "Không có sự kiện nào được lên lịch",
     "months": {
       "january": "Tháng 1",
       "february": "Tháng 2",

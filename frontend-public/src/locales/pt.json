@@ -24,6 +24,12 @@
     "noEvents": "Nenhum evento encontrado com os filtros selecionados."
   },
   "calendar": {
+    "title": "Calendário de Eventos",
+    "viewMonth": "Mês",
+    "viewWeek": "Semana",
+    "viewList": "Lista",
+    "today": "Hoje",
+    "noEvents": "Nenhum evento programado",
     "months": {
       "january": "Janeiro",
       "february": "Fevereiro",

@@ -32,6 +32,12 @@
     "noEvents": "ไม่พบงานที่ตรงกับตัวกรองที่เลือก"
   },
   "calendar": {
+    "title": "ปฏิทินงาน",
+    "viewMonth": "เดือน",
+    "viewWeek": "สัปดาห์",
+    "viewList": "รายการ",
+    "today": "วันนี้",
+    "noEvents": "ไม่มีงานที่กำหนดไว้",
     "months": {
       "january": "มกราคม",
       "february": "กุมภาพันธ์",
