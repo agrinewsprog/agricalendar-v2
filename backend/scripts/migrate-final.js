@@ -50,6 +50,13 @@ while ((match = rowPattern.exec(valuesSection)) !== null) {
     }
   }
 
+  // Filtrar solo eventos de 2025 en adelante
+  const eventYear = parseInt(convertedStartDate.split("-")[0]);
+  if (eventYear < 2025) {
+    console.log(`Omitiendo evento ${id} - año ${eventYear} (solo 2025+)`);
+    continue;
+  }
+
   let convertedEndDate = endDate;
   if (endDate && endDate.includes("-") && endDate.length === 10) {
     const parts = endDate.split("-");
@@ -70,8 +77,6 @@ while ((match = rowPattern.exec(valuesSection)) !== null) {
 `;
 
   eventCount++;
-
-  if (eventCount >= 200) break; // Limitar a 200 para evitar problemas
 }
 
 sql += `
