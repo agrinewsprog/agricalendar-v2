@@ -6,7 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { Event } from "@/lib/api";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useLanguage } from "@/context/useLanguage";
 
 interface CalendarProps {
@@ -15,6 +15,7 @@ interface CalendarProps {
 
 export default function Calendar({ events }: CalendarProps) {
   const [currentView, setCurrentView] = useState("dayGridMonth");
+  const [isCalendarReady, setIsCalendarReady] = useState(false);
   const { t, language } = useLanguage();
   const calendarRef = useRef<FullCalendar>(null);
 
@@ -65,16 +66,35 @@ export default function Calendar({ events }: CalendarProps) {
     }
   };
 
-  const handleViewChange = (view: string) => {
-    setCurrentView(view);
+  const handleViewChange = useCallback(
+    (view: string) => {
+      console.log("Changing view to:", view); // Debug log
 
-    // Cambiar la vista del calendario usando la referencia
-    const calendarApi = calendarRef.current?.getApi();
-    if (calendarApi) {
-      calendarApi.changeView(view);
-    }
-  };
+      setCurrentView(view);
 
+      // Cambiar la vista del calendario usando la referencia
+      const calendarApi = calendarRef.current?.getApi();
+      if (calendarApi && isCalendarReady) {
+        console.log("Calendar API available, changing view"); // Debug log
+        try {
+          calendarApi.changeView(view);
+        } catch (error) {
+          console.error("Error changing calendar view:", error);
+        }
+      } else {
+        console.error("Calendar API not available or not ready"); // Debug log
+      }
+    },
+    [isCalendarReady]
+  );
+
+  // Efecto para asegurar que el calendario esté listo
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsCalendarReady(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
       {/* Controles del calendario */}
@@ -184,7 +204,18 @@ export default function Calendar({ events }: CalendarProps) {
             );
           }}
           eventClassNames="hover:opacity-80 transition-opacity"
-          viewDidMount={(info) => setCurrentView(info.view.type)}
+          viewDidMount={(info) => {
+            console.log("View mounted:", info.view.type); // Debug log
+            setCurrentView(info.view.type);
+            setIsCalendarReady(true);
+          }}
+          viewWillUnmount={(info) => {
+            console.log("View will unmount:", info.view.type); // Debug log
+          }}
+          datesSet={(info) => {
+            console.log("Dates set for view:", info.view.type); // Debug log
+            setCurrentView(info.view.type);
+          }}
         />
       </div>
     </div>
