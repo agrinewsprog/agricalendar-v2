@@ -65,75 +65,78 @@ export default function CalendarAlternative({ events }: CalendarProps) {
 
   // Enfoque alternativo: Forzar re-render completo del calendario
   const handleViewChange = useCallback((view: string) => {
-    console.log('Alternative: Changing view to:', view);
+    console.log("Alternative: Changing view to:", view);
     setCurrentView(view);
     // Forzar re-render del componente completo
-    setForceRerender(prev => prev + 1);
+    setForceRerender((prev) => prev + 1);
   }, []);
 
   // Configuración del calendario que cambia con la vista
-  const calendarConfig = useMemo(() => ({
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
-    initialView: currentView,
-    headerToolbar: {
-      left: "prev,next today",
-      center: "title",
-      right: "",
-    },
-    events: calendarEvents,
-    eventClick: handleEventClick,
-    height: "auto",
-    locale: language,
-    firstDay: 1,
-    eventDisplay: "block",
-    dayMaxEvents: 3,
-    moreLinkClick: "popover",
-    eventTimeFormat: {
-      hour: "2-digit" as const,
-      minute: "2-digit" as const,
-      hour12: false,
-    },
-    slotLabelFormat: {
-      hour: "2-digit" as const,
-      minute: "2-digit" as const,
-      hour12: false,
-    },
-    buttonText: {
-      today: t("calendar.today"),
-      month: t("calendar.viewMonth"),
-      week: t("calendar.viewWeek"),
-      day: "Día",
-      list: t("calendar.viewList"),
-    },
-    noEventsText: t("calendar.noEvents"),
-    eventContent: (eventInfo: any) => {
-      return (
-        <div className="p-1 cursor-pointer">
-          <div className="font-medium text-xs truncate">
-            {eventInfo.event.title}
+  const calendarConfig = useMemo(
+    () => ({
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
+      initialView: currentView,
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "",
+      },
+      events: calendarEvents,
+      eventClick: handleEventClick,
+      height: "auto",
+      locale: language,
+      firstDay: 1,
+      eventDisplay: "block",
+      dayMaxEvents: 3,
+      moreLinkClick: "popover",
+      eventTimeFormat: {
+        hour: "2-digit" as const,
+        minute: "2-digit" as const,
+        hour12: false,
+      },
+      slotLabelFormat: {
+        hour: "2-digit" as const,
+        minute: "2-digit" as const,
+        hour12: false,
+      },
+      buttonText: {
+        today: t("calendar.today"),
+        month: t("calendar.viewMonth"),
+        week: t("calendar.viewWeek"),
+        day: "Día",
+        list: t("calendar.viewList"),
+      },
+      noEventsText: t("calendar.noEvents"),
+      eventContent: (eventInfo: any) => {
+        return (
+          <div className="p-1 cursor-pointer">
+            <div className="font-medium text-xs truncate">
+              {eventInfo.event.title}
+            </div>
+            {eventInfo.event.extendedProps.location && (
+              <div className="text-xs opacity-90 truncate">
+                📍 {eventInfo.event.extendedProps.location}
+              </div>
+            )}
+            {eventInfo.event.extendedProps.tipo && (
+              <div className="text-xs opacity-75 truncate">
+                {t(`eventTypes.${eventInfo.event.extendedProps.tipo}`) !==
+                `eventTypes.${eventInfo.event.extendedProps.tipo}`
+                  ? t(`eventTypes.${eventInfo.event.extendedProps.tipo}`)
+                  : eventInfo.event.extendedProps.tipo}
+              </div>
+            )}
           </div>
-          {eventInfo.event.extendedProps.location && (
-            <div className="text-xs opacity-90 truncate">
-              📍 {eventInfo.event.extendedProps.location}
-            </div>
-          )}
-          {eventInfo.event.extendedProps.tipo && (
-            <div className="text-xs opacity-75 truncate">
-              {t(`eventTypes.${eventInfo.event.extendedProps.tipo}`) !==
-              `eventTypes.${eventInfo.event.extendedProps.tipo}`
-                ? t(`eventTypes.${eventInfo.event.extendedProps.tipo}`)
-                : eventInfo.event.extendedProps.tipo}
-            </div>
-          )}
-        </div>
-      );
-    },
-    eventClassNames: "hover:opacity-80 transition-opacity",
-    viewDidMount: (info: any) => {
-      console.log('Alternative: View mounted:', info.view.type);
-      setCurrentView(info.view.type);
-    },
-  }), [currentView, calendarEvents, handleEventClick, language, t]);
+        );
+      },
+      eventClassNames: "hover:opacity-80 transition-opacity",
+      viewDidMount: (info: any) => {
+        console.log("Alternative: View mounted:", info.view.type);
+        setCurrentView(info.view.type);
+      },
+    }),
+    [currentView, calendarEvents, handleEventClick, language, t]
+  );
 
   return (
     <div className="bg-white rounded-lg shadow-sm border overflow-hidden">

@@ -26,6 +26,7 @@ import {
   getStatusText,
   truncateText,
 } from "@/lib/utils";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 export default function DashboardPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -186,7 +187,7 @@ export default function DashboardPage() {
                   Eventos Recientes
                 </h3>
                 <a
-                  href="/dashboard/events"
+                  href={createAdminRoute(ADMIN_ROUTES.EVENTS)}
                   className="text-sm font-medium text-blue-600 hover:text-blue-500"
                 >
                   Ver todos
@@ -218,7 +219,7 @@ export default function DashboardPage() {
                   </p>
                   <div className="mt-6">
                     <a
-                      href="/dashboard/events/create"
+                      href={createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE)}
                       className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                     >
                       <Calendar className="-ml-1 mr-2 h-5 w-5" />
@@ -301,7 +302,7 @@ export default function DashboardPage() {
               </h3>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <a
-                  href="/dashboard/events/create"
+                  href={createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE)}
                   className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                 >
                   <div>
@@ -320,7 +321,7 @@ export default function DashboardPage() {
                 </a>
 
                 <a
-                  href="/dashboard/languages"
+                  href={createAdminRoute(ADMIN_ROUTES.LANGUAGES)}
                   className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                 >
                   <div>
@@ -339,7 +340,7 @@ export default function DashboardPage() {
                 </a>
 
                 <a
-                  href="/dashboard/stats"
+                  href={createAdminRoute(ADMIN_ROUTES.STATS)}
                   className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                 >
                   <div>

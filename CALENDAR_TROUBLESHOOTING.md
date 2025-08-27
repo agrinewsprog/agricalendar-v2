@@ -5,14 +5,17 @@
 ### Posibles causas y soluciones:
 
 1. **Problema de hidratación SSR/CSR**
+
    - Next.js puede tener problemas de hidratación entre servidor y cliente
    - Solución: Asegurar que el componente sea completamente del lado del cliente
 
 2. **Dependencias de FullCalendar**
+
    - Verificar que todas las dependencias estén instaladas en producción
    - Revisar que las versiones sean compatibles
 
 3. **Problemas de caché en producción**
+
    - El caché puede estar sirviendo una versión anterior
    - Solución: Clear cache y rebuild
 
@@ -36,6 +39,7 @@
 - Agregado logs de debug para troubleshooting
 
 Si el problema persiste, considerar:
+
 - Verificar la versión de Next.js y React
 - Revisar el build de producción
 - Verificar las variables de entorno

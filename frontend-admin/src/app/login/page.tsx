@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Calendar, Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function LoginPage() {
   // Redirigir si ya está autenticado
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.push("/dashboard");
+      router.push(createAdminRoute(ADMIN_ROUTES.DASHBOARD));
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -37,7 +38,7 @@ export default function LoginPage() {
       const result = await login(email, password);
 
       if (result.success) {
-        router.push("/dashboard");
+        router.push(createAdminRoute(ADMIN_ROUTES.DASHBOARD));
       } else {
         setError(result.message);
       }

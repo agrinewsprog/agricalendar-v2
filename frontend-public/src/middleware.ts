@@ -18,11 +18,15 @@ const ROUTE_MAPPINGS: Record<string, Record<string, string>> = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Ignorar archivos estáticos y API routes
+  // Ignorar archivos estáticos, API routes y rutas del dashboard admin
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/static') ||
+    pathname.startsWith('/admin') ||     // Excluir rutas del admin
+    pathname.startsWith('/dashboard') ||  // Excluir rutas del dashboard
+    pathname.includes('/dashboard/') ||   // Excluir rutas que contengan dashboard
+    pathname.includes('/admin/') ||       // Excluir rutas que contengan admin
     pathname.includes('.') ||
     pathname.startsWith('/locales')
   ) {
@@ -69,7 +73,9 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - locales (translation files)
+     * - admin (admin routes)
+     * - dashboard (admin dashboard routes)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|locales).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|locales|admin|.*dashboard.*).*)',
   ],
 };

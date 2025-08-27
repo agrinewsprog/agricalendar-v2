@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 export default function HomePage() {
   const router = useRouter();
@@ -11,7 +12,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated) {
-        router.push("/dashboard");
+        router.push(createAdminRoute(ADMIN_ROUTES.DASHBOARD));
       } else {
         router.push("/login");
       }

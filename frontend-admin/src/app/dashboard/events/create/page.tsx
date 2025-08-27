@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 const eventSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -104,7 +105,7 @@ export default function CreateEventPage() {
       if (response.success) {
         setMessage({ type: "success", text: "Evento creado exitosamente" });
         setTimeout(() => {
-          router.push("/dashboard/events");
+          router.push(createAdminRoute(ADMIN_ROUTES.EVENTS));
         }, 1500);
       } else {
         setMessage({
@@ -130,7 +131,7 @@ export default function CreateEventPage() {
           {/* Header */}
           <div className="flex items-center space-x-4">
             <Link
-              href="/dashboard/events"
+              href={createAdminRoute(ADMIN_ROUTES.EVENTS)}
               className="text-gray-400 hover:text-gray-600"
             >
               <ArrowLeft className="h-6 w-6" />
@@ -312,7 +313,7 @@ export default function CreateEventPage() {
             {/* Actions */}
             <div className="flex justify-end space-x-4">
               <Link
-                href="/dashboard/events"
+                href={createAdminRoute(ADMIN_ROUTES.EVENTS)}
                 className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Cancelar

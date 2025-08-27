@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import TranslationModal from "@/components/TranslationModal";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 // Opciones para filtros
 const STATUS_OPTIONS = [
@@ -289,7 +290,7 @@ export default function EventsPage() {
               </p>
             </div>
             <Link
-              href="/dashboard/events/create"
+              href={createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition-colors"
             >
               <Plus className="h-4 w-4" />
@@ -496,7 +497,7 @@ export default function EventsPage() {
                     : "Aún no has creado ningún evento."}
                 </p>
                 <Link
-                  href="/dashboard/events/create"
+                  href={createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md inline-flex items-center gap-2 transition-colors"
                 >
                   <Plus className="h-4 w-4" />

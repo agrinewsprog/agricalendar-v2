@@ -17,35 +17,46 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home, current: true },
+  {
+    name: "Dashboard",
+    href: createAdminRoute(ADMIN_ROUTES.DASHBOARD),
+    icon: Home,
+    current: true,
+  },
   {
     name: "Eventos",
-    href: "/dashboard/events",
+    href: createAdminRoute(ADMIN_ROUTES.EVENTS),
     icon: Calendar,
     current: false,
   },
   {
     name: "Crear Evento",
-    href: "/dashboard/events/create",
+    href: createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE),
     icon: Plus,
     current: false,
   },
   {
     name: "Idiomas",
-    href: "/dashboard/languages",
+    href: createAdminRoute(ADMIN_ROUTES.LANGUAGES),
     icon: Globe,
     current: false,
   },
-  { name: "Usuarios", href: "/dashboard/users", icon: Users, current: false },
+  {
+    name: "Usuarios",
+    href: createAdminRoute(ADMIN_ROUTES.USERS),
+    icon: Users,
+    current: false,
+  },
   {
     name: "Estadísticas",
-    href: "/dashboard/stats",
+    href: createAdminRoute(ADMIN_ROUTES.STATS),
     icon: BarChart3,
     current: false,
   },
