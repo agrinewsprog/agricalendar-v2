@@ -76,6 +76,6 @@ export const config = {
      * - admin (admin routes)
      * - dashboard (admin dashboard routes)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|locales|admin|.*dashboard.*).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|locales|admin|dashboard).*)',
   ],
 };

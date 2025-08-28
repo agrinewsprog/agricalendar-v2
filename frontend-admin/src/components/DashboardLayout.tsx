@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Calendar,
   Menu,
@@ -17,11 +18,7 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  createAdminRoute,
-  createAdminRouteWithBasePath,
-  ADMIN_ROUTES,
-} from "@/lib/adminRoutes";
+import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -30,37 +27,37 @@ interface DashboardLayoutProps {
 const navigation = [
   {
     name: "Dashboard",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.DASHBOARD),
+    href: createAdminRoute(ADMIN_ROUTES.DASHBOARD),
     icon: Home,
     current: true,
   },
   {
     name: "Eventos",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS),
+    href: createAdminRoute(ADMIN_ROUTES.EVENTS),
     icon: Calendar,
     current: false,
   },
   {
     name: "Crear Evento",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS_CREATE),
+    href: createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE),
     icon: Plus,
     current: false,
   },
   {
     name: "Idiomas",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.LANGUAGES),
+    href: createAdminRoute(ADMIN_ROUTES.LANGUAGES),
     icon: Globe,
     current: false,
   },
   {
     name: "Usuarios",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.USERS),
+    href: createAdminRoute(ADMIN_ROUTES.USERS),
     icon: Users,
     current: false,
   },
   {
     name: "Estadísticas",
-    href: createAdminRouteWithBasePath(ADMIN_ROUTES.STATS),
+    href: createAdminRoute(ADMIN_ROUTES.STATS),
     icon: BarChart3,
     current: false,
   },
@@ -108,7 +105,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
           <nav className="flex-1 space-y-1 px-2 py-4">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
@@ -120,7 +117,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               >
                 <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
@@ -142,7 +139,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
                         className={cn(
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
@@ -153,7 +150,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       >
                         <item.icon className="h-5 w-5 shrink-0" />
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
