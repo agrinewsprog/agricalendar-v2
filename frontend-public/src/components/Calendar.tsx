@@ -8,6 +8,7 @@ import listPlugin from "@fullcalendar/list";
 import { Event } from "@/lib/api";
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useLanguage } from "@/context/useLanguage";
+import { getEventImageUrl } from "@/lib/imageUtils";
 
 interface CalendarProps {
   events: Event[];
@@ -52,6 +53,7 @@ export default function Calendar({ events }: CalendarProps) {
         region: event.region,
         startTime: event.startTime,
         endTime: event.endTime,
+        image: event.image,
       },
     }));
   }, [events, language, currentRoute]);
@@ -157,47 +159,40 @@ export default function Calendar({ events }: CalendarProps) {
           }}
           events={calendarEvents}
           eventClick={handleEventClick}
-          height="auto"
-          locale={language}
-          firstDay={1} // Lunes como primer día
-          eventDisplay="block"
-          dayMaxEvents={3}
-          moreLinkClick="popover"
-          eventTimeFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }}
-          slotLabelFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }}
-          buttonText={{
-            today: t("calendar.today"),
-            month: t("calendar.viewMonth"),
-            week: t("calendar.viewWeek"),
-            day: "Día",
-            list: t("calendar.viewList"),
-          }}
-          noEventsText={t("calendar.noEvents")}
           eventContent={(eventInfo) => {
+            const event = eventInfo.event;
+            const image = event.extendedProps.image;
+            const imageUrl = getEventImageUrl(image);
+
             return (
               <div className="p-1 cursor-pointer">
-                <div className="font-medium text-xs truncate">
-                  {eventInfo.event.title}
+                <div className="flex items-center gap-2 mb-1">
+                  {imageUrl && (
+                    <img
+                      src={imageUrl}
+                      alt={event.title}
+                      className="w-5 h-5 rounded object-cover flex-shrink-0"
+                      onError={(e) => {
+                        // Ocultar imagen si no se puede cargar
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  )}
+                  <div className="font-medium text-xs truncate">
+                    {event.title}
+                  </div>
                 </div>
-                {eventInfo.event.extendedProps.location && (
+                {event.extendedProps.location && (
                   <div className="text-xs opacity-90 truncate">
-                    📍 {eventInfo.event.extendedProps.location}
+                    📍 {event.extendedProps.location}
                   </div>
                 )}
-                {eventInfo.event.extendedProps.tipo && (
+                {event.extendedProps.tipo && (
                   <div className="text-xs opacity-75 truncate">
-                    {t(`eventTypes.${eventInfo.event.extendedProps.tipo}`) !==
-                    `eventTypes.${eventInfo.event.extendedProps.tipo}`
-                      ? t(`eventTypes.${eventInfo.event.extendedProps.tipo}`)
-                      : eventInfo.event.extendedProps.tipo}
+                    {t(`eventTypes.${event.extendedProps.tipo}`) !==
+                    `eventTypes.${event.extendedProps.tipo}`
+                      ? t(`eventTypes.${event.extendedProps.tipo}`)
+                      : event.extendedProps.tipo}
                   </div>
                 )}
               </div>

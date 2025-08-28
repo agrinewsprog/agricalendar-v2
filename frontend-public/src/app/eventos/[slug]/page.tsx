@@ -2,6 +2,7 @@
 
 import { eventsService, type Event } from "@/lib/api";
 import { formatDateRange } from "@/lib/utils";
+import { getEventImageUrl } from "@/lib/imageUtils";
 import {
   Calendar,
   MapPin,
@@ -109,6 +110,7 @@ export default function EventPage({ params }: EventPageProps) {
 
   const isUpcoming = new Date(event.startDate) > new Date();
   const isPast = new Date(event.startDate) < new Date();
+  const imageUrl = getEventImageUrl(event.image);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,8 +157,26 @@ export default function EventPage({ params }: EventPageProps) {
         <div className="max-w-4xl mx-auto">
           {/* Event Header */}
           <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex-1">
+            <div className="flex flex-col lg:flex-row gap-8 mb-6">
+              {/* Event Image */}
+              {imageUrl && (
+                <div className="lg:w-1/3">
+                  <img
+                    src={imageUrl}
+                    alt={event.name}
+                    className="w-full h-64 lg:h-80 object-cover rounded-lg shadow-md"
+                    onError={(e) => {
+                      // Ocultar contenedor si no se puede cargar la imagen
+                      (
+                        e.target as HTMLImageElement
+                      ).parentElement!.style.display = "none";
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Event Info */}
+              <div className={`flex-1 ${imageUrl ? "lg:w-2/3" : "w-full"}`}>
                 <div className="flex items-center gap-2 mb-4">
                   <span
                     className="w-4 h-4 rounded-full"
