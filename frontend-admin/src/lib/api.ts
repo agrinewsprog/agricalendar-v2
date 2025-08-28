@@ -243,7 +243,8 @@ export const eventsService = {
   },
 
   async getById(id: number): Promise<ApiResponse<Event>> {
-    const response = await api.get(`/events/${id}`)
+    // Usar ruta temporal hasta que el admin endpoint esté disponible
+    const response = await api.get(`/events/id/${id}`)
     return response.data
   },
 

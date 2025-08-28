@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   getAllEvents,
   getEventBySlug,
+  getAdminEventById,
   createEvent,
   updateEvent,
   updateEventStatus,
@@ -16,6 +17,7 @@ const router = Router();
 
 // Rutas públicas
 router.get('/', getAllEvents);
+router.get('/id/:id', authenticateToken, getAdminEventById); // Ruta temporal para obtener por ID
 router.get('/:slug', getEventBySlug);
 
 // Rutas protegidas (requieren autenticación)

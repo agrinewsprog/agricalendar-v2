@@ -69,14 +69,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     const normalizedPathname = pathname.replace(/\/$/, "") || "/";
     const normalizedHref = href.replace(/\/$/, "") || "/";
 
-    console.log("🔍 Navigation Debug:", {
-      originalPathname: pathname,
-      originalHref: href,
-      normalizedPathname,
-      normalizedHref,
-      exactMatch: normalizedPathname === normalizedHref,
-    });
-
     // Exact match after normalization
     if (normalizedPathname === normalizedHref) {
       return true;

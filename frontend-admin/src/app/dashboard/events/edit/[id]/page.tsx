@@ -32,16 +32,39 @@ export default function EditEventPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = await eventsService.getAdminEventById(parseInt(eventId));
+
+      // Verificar que el ID sea un número válido
+      const eventIdNum = parseInt(eventId);
+      if (isNaN(eventIdNum) || eventIdNum <= 0) {
+        setError("ID de evento inválido");
+        return;
+      }
+
+      // Intentar primero el endpoint admin, si falla usar el público
+      let response;
+      try {
+        response = await eventsService.getAdminEventById(eventIdNum);
+      } catch (adminError) {
+        console.log("Admin endpoint not available, trying public endpoint");
+        try {
+          response = await eventsService.getById(eventIdNum);
+        } catch (publicError) {
+          // Ambos endpoints fallaron - el evento no existe
+          setError(
+            `El evento con ID ${eventIdNum} no fue encontrado. Puede que haya sido eliminado.`
+          );
+          return;
+        }
+      }
 
       if (response.success && response.data) {
         setEvent(response.data);
       } else {
-        setError("Evento no encontrado");
+        setError(`El evento con ID ${eventIdNum} no fue encontrado.`);
       }
     } catch (err) {
       console.error("Error loading event:", err);
-      setError("Error al cargar el evento");
+      setError("Error inesperado al cargar el evento");
     } finally {
       setLoading(false);
     }
