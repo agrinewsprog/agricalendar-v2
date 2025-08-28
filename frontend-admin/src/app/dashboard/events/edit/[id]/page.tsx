@@ -7,7 +7,11 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { eventsService, type Event } from "@/lib/api";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
+import {
+  createAdminRoute,
+  createAdminRouteWithBasePath,
+  ADMIN_ROUTES,
+} from "@/lib/adminRoutes";
 
 export default function EditEventPage() {
   const params = useParams();
@@ -71,7 +75,9 @@ export default function EditEventPage() {
 
       if (response.success) {
         alert("Evento actualizado exitosamente");
-        window.location.href = createAdminRoute(ADMIN_ROUTES.EVENTS);
+        window.location.href = createAdminRouteWithBasePath(
+          ADMIN_ROUTES.EVENTS
+        );
       } else {
         setError("Error al actualizar el evento");
       }
@@ -105,7 +111,7 @@ export default function EditEventPage() {
               {error || "Evento no encontrado"}
             </p>
             <Link
-              href={createAdminRoute(ADMIN_ROUTES.EVENTS)}
+              href={createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS)}
               className="mt-3 inline-flex items-center text-sm text-red-800 hover:text-red-900"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
@@ -125,7 +131,7 @@ export default function EditEventPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link
-                href={createAdminRoute(ADMIN_ROUTES.EVENTS)}
+                href={createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS)}
                 className="flex items-center text-gray-600 hover:text-gray-900"
               >
                 <ArrowLeft className="h-5 w-5 mr-2" />

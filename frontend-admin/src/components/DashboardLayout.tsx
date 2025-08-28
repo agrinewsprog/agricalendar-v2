@@ -17,7 +17,11 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
+import {
+  createAdminRoute,
+  createAdminRouteWithBasePath,
+  ADMIN_ROUTES,
+} from "@/lib/adminRoutes";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -26,37 +30,37 @@ interface DashboardLayoutProps {
 const navigation = [
   {
     name: "Dashboard",
-    href: createAdminRoute(ADMIN_ROUTES.DASHBOARD),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.DASHBOARD),
     icon: Home,
     current: true,
   },
   {
     name: "Eventos",
-    href: createAdminRoute(ADMIN_ROUTES.EVENTS),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS),
     icon: Calendar,
     current: false,
   },
   {
     name: "Crear Evento",
-    href: createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.EVENTS_CREATE),
     icon: Plus,
     current: false,
   },
   {
     name: "Idiomas",
-    href: createAdminRoute(ADMIN_ROUTES.LANGUAGES),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.LANGUAGES),
     icon: Globe,
     current: false,
   },
   {
     name: "Usuarios",
-    href: createAdminRoute(ADMIN_ROUTES.USERS),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.USERS),
     icon: Users,
     current: false,
   },
   {
     name: "Estadísticas",
-    href: createAdminRoute(ADMIN_ROUTES.STATS),
+    href: createAdminRouteWithBasePath(ADMIN_ROUTES.STATS),
     icon: BarChart3,
     current: false,
   },

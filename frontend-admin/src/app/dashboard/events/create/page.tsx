@@ -10,7 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
+import {
+  createAdminRoute,
+  createAdminRouteWithBasePath,
+  ADMIN_ROUTES,
+} from "@/lib/adminRoutes";
 
 const eventSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),

@@ -19,7 +19,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import TranslationModal from "@/components/TranslationModal";
-import { createAdminRoute, ADMIN_ROUTES } from "@/lib/adminRoutes";
+import {
+  createAdminRoute,
+  createAdminRouteWithBasePath,
+  ADMIN_ROUTES,
+} from "@/lib/adminRoutes";
 
 // Opciones para filtros
 const STATUS_OPTIONS = [
