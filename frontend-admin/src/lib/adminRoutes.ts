@@ -2,17 +2,24 @@
  * Utility for handling admin routes with proper basePath in production
  */
 
+/**
+ * Utility for handling admin routes with proper basePath in production
+ */
+
+/**
+ * Utility for handling admin routes with proper basePath in production
+ */
+
 // Get the base path for admin routes
 const getAdminBasePath = (): string => {
   if (typeof window !== 'undefined') {
-    // Client-side: check if we're in production by domain or if basePath is present
-    const isProduction = window.location.hostname !== 'localhost' && 
-                         window.location.hostname !== '127.0.0.1' &&
-                         window.location.hostname !== 'localhost:3001';
-    return isProduction ? '/admin' : '';
+    // Client-side: if we're NOT on localhost, we need /admin prefix
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1';
+    return isLocalhost ? '' : '/admin';
   }
   
-  // Server-side: use environment
+  // Server-side: use environment variable
   return process.env.NODE_ENV === 'production' ? '/admin' : '';
 };
 
@@ -36,7 +43,20 @@ export const createAdminRoute = (path: string): string => {
 export const createAdminRouteWithBasePath = (path: string): string => {
   const basePath = getAdminBasePath();
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `${basePath}${cleanPath}`;
+  const result = `${basePath}${cleanPath}`;
+  
+  // Debug logging
+  if (typeof window !== 'undefined') {
+    console.log('🔍 createAdminRouteWithBasePath Debug:', {
+      hostname: window.location.hostname,
+      pathname: window.location.pathname,
+      inputPath: path,
+      basePath: basePath,
+      result: result
+    });
+  }
+  
+  return result;
 };
 
 /**
