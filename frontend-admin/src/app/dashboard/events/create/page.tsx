@@ -21,13 +21,32 @@ const eventSchema = z.object({
   description: z.string().optional(),
   startDate: z.string().min(1, "La fecha de inicio es requerida"),
   endDate: z.string().optional(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
   location: z.string().optional(),
   address: z.string().optional(),
+  state: z.string().optional(),
+  region: z.string().optional(),
   website: z.string().url("URL inválida").optional().or(z.literal("")),
   color: z.string().optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
   languageId: z.string().min(1, "El idioma es requerido"),
-  type: z.string().optional(),
+  tipo: z.string().optional(),
+  organizerName: z.string().optional(),
+  organizerEmail: z
+    .string()
+    .email("Email inválido")
+    .optional()
+    .or(z.literal("")),
+  organizerPhone: z.string().optional(),
+  maxAttendees: z.string().optional(),
+  registrationRequired: z.boolean().optional(),
+  registrationDeadline: z.string().optional(),
+  tags: z.string().optional(),
+  registro: z.string().optional(),
+  image: z.string().optional(),
+  seoTitle: z.string().optional(),
+  seoDesc: z.string().optional(),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
@@ -54,6 +73,7 @@ export default function CreateEventPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [languages, setLanguages] = useState<any[]>([]);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -74,10 +94,31 @@ export default function CreateEventPage() {
   });
 
   const watchColor = watch("color");
+  const watchName = watch("name");
+  const watchDescription = watch("description");
+  const watchRegistrationRequired = watch("registrationRequired");
 
   useEffect(() => {
     fetchLanguages();
   }, []);
+
+  // Auto-rellenar campos SEO basado en nombre y descripción
+  useEffect(() => {
+    if (watchName && !watch("seoTitle")) {
+      setValue("seoTitle", watchName);
+    }
+  }, [watchName, setValue, watch]);
+
+  useEffect(() => {
+    if (watchDescription && !watch("seoDesc")) {
+      // Limitar descripción SEO a 160 caracteres
+      const truncatedDesc =
+        watchDescription.length > 160
+          ? watchDescription.substring(0, 157) + "..."
+          : watchDescription;
+      setValue("seoDesc", truncatedDesc);
+    }
+  }, [watchDescription, setValue, watch]);
 
   const fetchLanguages = async () => {
     try {
@@ -93,18 +134,60 @@ export default function CreateEventPage() {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      // Aquí podrías agregar validaciones de imagen (tamaño, tipo, etc.)
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB límite
+        setMessage({
+          type: "error",
+          text: "La imagen no puede superar los 5MB",
+        });
+        e.target.value = "";
+        setSelectedImage(null);
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        setMessage({
+          type: "error",
+          text: "Solo se permiten archivos de imagen",
+        });
+        e.target.value = "";
+        setSelectedImage(null);
+        return;
+      }
+    }
+  };
+
   const onSubmit = async (data: EventFormData) => {
     try {
       setLoading(true);
       setMessage(null);
 
-      // Convert languageId to number
-      const eventData = {
-        ...data,
-        languageId: parseInt(data.languageId),
-      };
+      // Crear FormData para manejar la imagen
+      const formData = new FormData();
 
-      const response = await eventsService.create(eventData);
+      // Agregar todos los campos del formulario
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          if (key === "languageId") {
+            formData.append(key, parseInt(value as string).toString());
+          } else if (key === "maxAttendees" && value) {
+            formData.append(key, parseInt(value as string).toString());
+          } else {
+            formData.append(key, value as string);
+          }
+        }
+      });
+
+      // Agregar la imagen si existe
+      if (selectedImage) {
+        formData.append("image", selectedImage);
+      }
+
+      const response = await eventsService.create(formData);
 
       if (response.success) {
         setMessage({ type: "success", text: "Evento creado exitosamente" });
@@ -175,6 +258,7 @@ export default function CreateEventPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Información Básica */}
             <div className="bg-white shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
@@ -242,7 +326,7 @@ export default function CreateEventPage() {
                       Tipo de evento
                     </label>
                     <select
-                      {...register("type")}
+                      {...register("tipo")}
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Selecciona un tipo</option>
@@ -252,48 +336,6 @@ export default function CreateEventPage() {
                         </option>
                       ))}
                     </select>
-                  </div>
-
-                  {/* Start Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Fecha y hora de inicio *
-                    </label>
-                    <input
-                      type="datetime-local"
-                      {...register("startDate")}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    {errors.startDate && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {errors.startDate.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* End Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Fecha y hora de finalización
-                    </label>
-                    <input
-                      type="datetime-local"
-                      {...register("endDate")}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-
-                  {/* Location */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Lugar
-                    </label>
-                    <input
-                      type="text"
-                      {...register("location")}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Ej: Centro de Convenciones"
-                    />
                   </div>
 
                   {/* Status */}
@@ -309,6 +351,417 @@ export default function CreateEventPage() {
                       <option value="PUBLISHED">Publicado</option>
                       <option value="ARCHIVED">Archivado</option>
                     </select>
+                  </div>
+
+                  {/* Color */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Color del evento
+                    </label>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <input
+                        type="color"
+                        {...register("color")}
+                        className="h-10 w-20 border border-gray-300 rounded-md cursor-pointer"
+                      />
+                      <div className="flex space-x-1">
+                        {eventColors.map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            onClick={() => setValue("color", color)}
+                            className={`w-6 h-6 rounded-full border-2 ${
+                              watchColor === color
+                                ? "border-gray-900"
+                                : "border-gray-300"
+                            }`}
+                            style={{ backgroundColor: color }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fechas y Horarios */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Fechas y Horarios
+                </h3>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {/* Start Date */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Fecha de inicio *
+                    </label>
+                    <input
+                      type="date"
+                      {...register("startDate")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {errors.startDate && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.startDate.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* End Date */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Fecha de finalización
+                    </label>
+                    <input
+                      type="date"
+                      {...register("endDate")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+
+                  {/* Start Time */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Hora de inicio
+                    </label>
+                    <input
+                      type="time"
+                      {...register("startTime")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+
+                  {/* End Time */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Hora de finalización
+                    </label>
+                    <input
+                      type="time"
+                      {...register("endTime")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Ubicación */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Ubicación
+                </h3>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {/* Location */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Lugar/Venue
+                    </label>
+                    <input
+                      type="text"
+                      {...register("location")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: Centro de Convenciones"
+                    />
+                  </div>
+
+                  {/* Address */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Dirección
+                    </label>
+                    <input
+                      type="text"
+                      {...register("address")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: Av. Principal 123"
+                    />
+                  </div>
+
+                  {/* State */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Estado/Provincia
+                    </label>
+                    <input
+                      type="text"
+                      {...register("state")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: Madrid"
+                    />
+                  </div>
+
+                  {/* Region */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      País/Región
+                    </label>
+                    <input
+                      type="text"
+                      {...register("region")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: España"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Organizador */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Información del Organizador
+                </h3>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {/* Organizer Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Nombre del organizador
+                    </label>
+                    <input
+                      type="text"
+                      {...register("organizerName")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: Juan Pérez"
+                    />
+                  </div>
+
+                  {/* Organizer Email */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Email del organizador
+                    </label>
+                    <input
+                      type="email"
+                      {...register("organizerEmail")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: juan@ejemplo.com"
+                    />
+                    {errors.organizerEmail && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.organizerEmail.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Organizer Phone */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Teléfono del organizador
+                    </label>
+                    <input
+                      type="tel"
+                      {...register("organizerPhone")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: +34 123 456 789"
+                    />
+                  </div>
+
+                  {/* Website */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Sitio web del evento
+                    </label>
+                    <input
+                      type="url"
+                      {...register("website")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="https://ejemplo.com"
+                    />
+                    {errors.website && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.website.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Registro */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Información de Registro
+                </h3>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {/* Registration Required */}
+                  <div className="sm:col-span-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        {...register("registrationRequired")}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label className="ml-2 block text-sm text-gray-900">
+                        Se requiere registro previo para este evento
+                      </label>
+                    </div>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Activa esta opción si los asistentes deben registrarse
+                      antes del evento
+                    </p>
+                  </div>
+
+                  {/* Campos condicionales que aparecen solo si se requiere registro */}
+                  {watchRegistrationRequired && (
+                    <>
+                      {/* Max Attendees */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Máximo de asistentes
+                        </label>
+                        <input
+                          type="number"
+                          {...register("maxAttendees")}
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Ej: 500"
+                          min="1"
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                          Deja vacío si no hay límite
+                        </p>
+                      </div>
+
+                      {/* Registration Deadline */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Fecha límite de registro
+                        </label>
+                        <input
+                          type="date"
+                          {...register("registrationDeadline")}
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                          Fecha hasta la cual se pueden registrar asistentes
+                        </p>
+                      </div>
+
+                      {/* Registro */}
+                      <div className="sm:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Información adicional de registro
+                        </label>
+                        <textarea
+                          {...register("registro")}
+                          rows={3}
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Instrucciones adicionales sobre el proceso de registro, requisitos, documentos necesarios, etc."
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                          Información adicional que los asistentes deben conocer
+                          sobre el registro
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* SEO y Contenido */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  SEO y Contenido
+                </h3>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {/* Image */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Imagen del evento
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {selectedImage && (
+                      <div className="mt-2">
+                        <p className="text-sm text-green-600">
+                          Imagen seleccionada: {selectedImage.name} (
+                          {(selectedImage.size / 1024 / 1024).toFixed(2)} MB)
+                        </p>
+                      </div>
+                    )}
+                    <p className="mt-1 text-sm text-gray-500">
+                      Imagen principal del evento (recomendado: 1200x630px para
+                      redes sociales, máximo 5MB)
+                    </p>
+                  </div>
+
+                  {/* Tags */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Etiquetas/Keywords
+                    </label>
+                    <input
+                      type="text"
+                      {...register("tags")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: avicultura, ganadería, agricultura, congreso, conferencia"
+                    />
+                    <p className="mt-1 text-sm text-gray-500">
+                      Separa las etiquetas con comas. Estas ayudan a categorizar
+                      el evento y mejorar el SEO.
+                    </p>
+                  </div>
+
+                  {/* SEO Title */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Título SEO
+                    </label>
+                    <input
+                      type="text"
+                      {...register("seoTitle")}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Título optimizado para motores de búsqueda (se rellena automáticamente)"
+                      maxLength={60}
+                    />
+                    <div className="mt-1 flex justify-between">
+                      <p className="text-sm text-gray-500">
+                        Se auto-rellena con el nombre del evento. Puedes
+                        editarlo.
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {watch("seoTitle")?.length || 0}/60
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* SEO Description */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Descripción SEO
+                    </label>
+                    <textarea
+                      {...register("seoDesc")}
+                      rows={3}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Descripción optimizada para motores de búsqueda (se rellena automáticamente)"
+                      maxLength={160}
+                    />
+                    <div className="mt-1 flex justify-between">
+                      <p className="text-sm text-gray-500">
+                        Se auto-rellena con la descripción del evento. Puedes
+                        editarla.
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {watch("seoDesc")?.length || 0}/160
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

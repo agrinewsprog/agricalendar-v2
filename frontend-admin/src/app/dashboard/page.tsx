@@ -51,21 +51,45 @@ export default function DashboardPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [eventsResponse, languagesResponse] = await Promise.all([
-        eventsService.getAll({ limit: 10 }),
-        languagesService.getAll(),
-      ]);
+      const [recentEventsResponse, allEventsResponse, languagesResponse] =
+        await Promise.all([
+          eventsService.getAdminEvents({ limit: 10 }), // Para mostrar eventos recientes
+          eventsService.getAdminEvents({ limit: 1000 }), // Para calcular estadísticas de todos los eventos (límite alto)
+          languagesService.getAll(),
+        ]);
 
-      if (eventsResponse.success) {
-        setEvents(eventsResponse.data || []);
+      // Establecer eventos recientes para mostrar en la lista
+      if (recentEventsResponse.success) {
+        setEvents(recentEventsResponse.data || []);
+      }
 
-        // Calcular estadísticas
-        const allEvents = eventsResponse.data || [];
+      // Calcular estadísticas con todos los eventos
+      if (allEventsResponse.success) {
+        const allEvents = allEventsResponse.data || [];
+
+        // Debug logging
+        console.log("🔍 Dashboard Debug - All Events Response:", {
+          totalReceived: allEvents.length,
+          events: allEvents.map((e) => ({
+            id: e.id,
+            name: e.name,
+            status: e.status,
+          })),
+          response: allEventsResponse,
+        });
+
         const published = allEvents.filter((e) => e.status === "PUBLISHED");
         const drafts = allEvents.filter((e) => e.status === "DRAFT");
         const upcoming = allEvents.filter(
           (e) => new Date(e.startDate) > new Date()
         );
+
+        console.log("🔍 Dashboard Debug - Stats Calculation:", {
+          total: allEvents.length,
+          published: published.length,
+          drafts: drafts.length,
+          upcoming: upcoming.length,
+        });
 
         setStats({
           totalEvents: allEvents.length,

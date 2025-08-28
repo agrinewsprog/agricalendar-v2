@@ -26,6 +26,16 @@ export async function generateMetadata({
 }: EventPageProps): Promise<Metadata> {
   const resolvedParams = await params;
 
+  // Metadatos por defecto en caso de error
+  const defaultMetadata: Metadata = {
+    title: "Evento | AgriCalendar",
+    description: "Calendario de eventos avícolas y agrícolas.",
+    robots: {
+      index: false, // No indexar páginas con errores
+      follow: false,
+    },
+  };
+
   try {
     const response = await eventsService.getBySlug(
       resolvedParams.slug,
@@ -37,6 +47,10 @@ export async function generateMetadata({
         title: "Evento no encontrado | AgriCalendar",
         description:
           "El evento que buscas no fue encontrado en nuestro calendario.",
+        robots: {
+          index: false,
+          follow: false,
+        },
       };
     }
 
@@ -126,10 +140,8 @@ export async function generateMetadata({
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
-    return {
-      title: "Error | AgriCalendar",
-      description: "Ocurrió un error al cargar el evento.",
-    };
+    // En caso de error, retornar metadatos por defecto
+    return defaultMetadata;
   }
 }
 
@@ -179,7 +191,7 @@ function generateStructuredData(event: any, params: any) {
 export default async function EventPage({ params }: EventPageProps) {
   const resolvedParams = await params;
 
-  // Obtener datos del evento para structured data
+  // Obtener datos del evento para structured data con manejo de errores
   let structuredData = null;
   try {
     const response = await eventsService.getBySlug(
@@ -191,6 +203,7 @@ export default async function EventPage({ params }: EventPageProps) {
     }
   } catch (error) {
     console.error("Error generating structured data:", error);
+    // No hacer nada, continuar sin structured data
   }
 
   return (

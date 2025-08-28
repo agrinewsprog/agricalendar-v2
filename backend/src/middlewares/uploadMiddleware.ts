@@ -2,8 +2,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Crear directorio de uploads si no existe
-const uploadsDir = path.join(__dirname, '../../uploads');
+// Crear directorio de uploads en frontend-public si no existe
+const uploadsDir = path.join(__dirname, '../../../frontend-public/public/images/eventos');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }

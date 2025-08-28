@@ -276,6 +276,91 @@ export const getEventBySlug = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/admin/events/:id - Obtener evento por ID para administradores
+export const getAdminEventById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { language = 'es' } = req.query;
+
+    if (!id || isNaN(parseInt(id))) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID de evento inválido'
+      });
+    }
+
+    const event = await prisma.event.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        language: true,
+        user: {
+          select: { id: true, name: true, username: true }
+        },
+        translations: {
+          where: { 
+            language: { 
+              code: language as string 
+            } 
+          },
+          include: {
+            language: true
+          }
+        },
+        seoMetadata: {
+          where: { 
+            language: { 
+              code: language as string 
+            } 
+          },
+          include: {
+            language: true
+          }
+        }
+      }
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        error: 'Evento no encontrado'
+      });
+    }
+
+    // Aplicar traducción si está disponible
+    let translatedEvent = { ...event };
+    if (event.translations && event.translations.length > 0) {
+      const translation = event.translations[0];
+      translatedEvent = {
+        ...event,
+        name: translation.name || event.name,
+        description: translation.description || event.description,
+        location: translation.location || event.location,
+        slug: translation.slug || event.slug
+      };
+    }
+
+    // Agregar metadatos SEO si están disponibles
+    if (event.seoMetadata && event.seoMetadata.length > 0) {
+      const seoData = event.seoMetadata[0];
+      (translatedEvent as any).seoTitle = seoData.title;
+      (translatedEvent as any).seoDesc = seoData.description;
+      (translatedEvent as any).keywords = seoData.keywords;
+      (translatedEvent as any).ogImage = seoData.ogImage;
+    }
+
+    res.json({
+      success: true,
+      data: translatedEvent
+    });
+  } catch (error) {
+    console.error('Error fetching admin event:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener evento'
+    });
+  }
+};
+
 // POST /api/events - Crear nuevo evento
 export const createEvent = async (req: Request, res: Response) => {
   try {
@@ -360,7 +445,7 @@ export const createEvent = async (req: Request, res: Response) => {
 
     // Manejar imagen subida
     const imageFile = (req as any).file;
-    const imagePath = imageFile ? `/uploads/${imageFile.filename}` : null;
+    const imagePath = imageFile ? `/images/eventos/${imageFile.filename}` : null;
 
     // Parsear tags si viene como string
     let parsedTags: string[] = [];

@@ -77,11 +77,16 @@ export default function EventPageClient({ params }: EventPageProps) {
         if (response.success) {
           setEvent(response.data);
         } else {
+          setError(response.error || "Evento no encontrado");
+        }
+      } catch (err: any) {
+        console.error("Error loading event:", err);
+        // Solo mostrar error si no es 404
+        if (err.response?.status !== 404) {
+          setError("Error al cargar el evento");
+        } else {
           setError("Evento no encontrado");
         }
-      } catch (err) {
-        console.error("Error loading event:", err);
-        setError("Error al cargar el evento");
       } finally {
         setLoading(false);
       }

@@ -32,7 +32,7 @@ export default function EditEventPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = await eventsService.getById(parseInt(eventId));
+      const response = await eventsService.getAdminEventById(parseInt(eventId));
 
       if (response.success && response.data) {
         setEvent(response.data);

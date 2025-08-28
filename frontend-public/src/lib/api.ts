@@ -4,8 +4,28 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://agricalendar.ne
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 30000, // Aumentar timeout a 30 segundos
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
+
+// Interceptor para manejar errores globalmente
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Solo log errores que no sean 404 en eventos específicos para reducir spam
+    if (!(error.response?.status === 404 && error.config?.url?.includes('/events/'))) {
+      console.error('API Error:', {
+        url: error.config?.url,
+        method: error.config?.method,
+        status: error.response?.status,
+        message: error.message,
+      })
+    }
+    return Promise.reject(error)
+  }
+)
 
 // Tipos de datos
 export interface Language {
@@ -28,6 +48,7 @@ export interface Event {
   endTime: string | null
   color: string | null
   location: string | null
+  address: string | null
   description: string | null
   state: string | null
   region: string | null
@@ -37,6 +58,13 @@ export interface Event {
   status: string
   languageId: number
   userId: number
+  organizerName: string | null
+  organizerEmail: string | null
+  organizerPhone: string | null
+  maxAttendees: number | null
+  registrationRequired: boolean | null
+  registrationDeadline: string | null
+  tags: string | null
   registro: string | null
   seoTitle: string | null
   seoDesc: string | null
@@ -83,10 +111,23 @@ export const eventsService = {
 
   // Obtener evento por slug
   getBySlug: async (slug: string, language?: string): Promise<ApiResponse<Event>> => {
-    const response = await api.get(`/events/${slug}`, {
-      params: { language }
-    })
-    return response.data
+    try {
+      const response = await api.get(`/events/${slug}`, {
+        params: { language }
+      })
+      return response.data
+    } catch (error: any) {
+      // Si es un 404, retornar una respuesta controlada
+      if (error.response?.status === 404) {
+        return {
+          success: false,
+          data: null as any,
+          error: 'Evento no encontrado'
+        }
+      }
+      // Para otros errores, re-lanzar
+      throw error
+    }
   },
 }
 

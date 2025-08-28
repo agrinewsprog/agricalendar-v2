@@ -19,12 +19,19 @@ export const getPublicBaseUrl = (): string => {
 
 /**
  * Genera la URL completa para una imagen de evento
- * @param imageName - Nombre del archivo de imagen
+ * @param imagePath - Ruta o nombre del archivo de imagen
  * @returns URL completa de la imagen
  */
-export const getEventImageUrl = (imageName: string | null | undefined): string | null => {
-  if (!imageName) return null;
+export const getEventImageUrl = (imagePath: string | null | undefined): string | null => {
+  if (!imagePath) return null;
   
   const baseUrl = getPublicBaseUrl();
-  return `${baseUrl}/images/eventos/${imageName}`;
+  
+  // Si ya incluye la ruta completa (ej: "/images/eventos/file.jpg")
+  if (imagePath.startsWith('/images/eventos/')) {
+    return `${baseUrl}${imagePath}`;
+  }
+  
+  // Si solo es el nombre del archivo
+  return `${baseUrl}/images/eventos/${imagePath}`;
 };

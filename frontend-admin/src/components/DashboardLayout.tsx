@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Calendar,
@@ -29,37 +29,31 @@ const navigation = [
     name: "Dashboard",
     href: createAdminRoute(ADMIN_ROUTES.DASHBOARD),
     icon: Home,
-    current: true,
   },
   {
     name: "Eventos",
     href: createAdminRoute(ADMIN_ROUTES.EVENTS),
     icon: Calendar,
-    current: false,
   },
   {
     name: "Crear Evento",
     href: createAdminRoute(ADMIN_ROUTES.EVENTS_CREATE),
     icon: Plus,
-    current: false,
   },
   {
     name: "Idiomas",
     href: createAdminRoute(ADMIN_ROUTES.LANGUAGES),
     icon: Globe,
-    current: false,
   },
   {
     name: "Usuarios",
     href: createAdminRoute(ADMIN_ROUTES.USERS),
     icon: Users,
-    current: false,
   },
   {
     name: "Estadísticas",
     href: createAdminRoute(ADMIN_ROUTES.STATS),
     icon: BarChart3,
-    current: false,
   },
 ];
 
@@ -67,6 +61,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Function to determine if a navigation item is current
+  const isCurrentPage = (href: string) => {
+    // Normalize both pathname and href by removing trailing slashes for comparison
+    const normalizedPathname = pathname.replace(/\/$/, "") || "/";
+    const normalizedHref = href.replace(/\/$/, "") || "/";
+
+    console.log("🔍 Navigation Debug:", {
+      originalPathname: pathname,
+      originalHref: href,
+      normalizedPathname,
+      normalizedHref,
+      exactMatch: normalizedPathname === normalizedHref,
+    });
+
+    // Exact match after normalization
+    if (normalizedPathname === normalizedHref) {
+      return true;
+    }
+
+    return false;
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -110,7 +127,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 href={item.href}
                 className={cn(
                   "group flex items-center px-2 py-2 text-sm font-medium rounded-md",
-                  item.current
+                  isCurrentPage(item.href)
                     ? "bg-blue-100 text-blue-900"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
@@ -143,7 +160,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         href={item.href}
                         className={cn(
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
-                          item.current
+                          isCurrentPage(item.href)
                             ? "bg-blue-50 text-blue-600"
                             : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                         )}

@@ -247,6 +247,12 @@ export const eventsService = {
     return response.data
   },
 
+  // Método admin para obtener evento por ID (incluye borradores y eventos privados)
+  async getAdminEventById(id: number): Promise<ApiResponse<Event>> {
+    const response = await api.get(`/admin/events/${id}`)
+    return response.data
+  },
+
   async getBySlug(slug: string, language?: string): Promise<ApiResponse<Event>> {
     const response = await api.get(`/events/slug/${slug}`, {
       params: language ? { language } : {}
