@@ -1,13 +1,13 @@
 /**
- * Utilidades para manejo de imágenes
+ * Utilidades para manejo de imágenes en el frontend admin
  */
 
 /**
- * Obtiene la URL base del frontend público
+ * Obtiene la URL base del frontend público para acceder a las imágenes
  */
 export const getPublicBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
-    // Cliente: usar la URL actual del frontend público
+    // Cliente: usar la URL del frontend público
     return window.location.hostname === 'localhost' 
       ? 'http://localhost:3000'
       : 'https://agricalendar.net';

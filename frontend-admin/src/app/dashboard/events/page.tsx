@@ -24,6 +24,7 @@ import {
   createAdminRouteWithBasePath,
   ADMIN_ROUTES,
 } from "@/lib/adminRoutes";
+import { getEventImageUrl } from "@/lib/imageUtils";
 
 // Opciones para filtros
 const STATUS_OPTIONS = [
@@ -522,9 +523,14 @@ export default function EventsPage() {
                           {event.image && (
                             <div className="flex-shrink-0">
                               <img
-                                src={`http://localhost:4000${event.image}`}
+                                src={getEventImageUrl(event.image) || ""}
                                 alt={event.name}
                                 className="w-16 h-16 object-cover rounded-lg"
+                                onError={(e) => {
+                                  // Ocultar imagen si no se puede cargar
+                                  (e.target as HTMLImageElement).style.display =
+                                    "none";
+                                }}
                               />
                             </div>
                           )}

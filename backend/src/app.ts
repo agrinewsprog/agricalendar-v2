@@ -31,7 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos (imágenes subidas)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/public', express.static(path.join(__dirname, '../public')));
 
 // Health check
 app.get('/api/health', (req, res) => {
