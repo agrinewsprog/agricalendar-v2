@@ -29,6 +29,7 @@ import {
 import {
   createAdminRoute,
   createAdminRouteWithBasePath,
+  createPublicUrl,
   ADMIN_ROUTES,
 } from "@/lib/adminRoutes";
 
@@ -301,11 +302,13 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <a
-                              href={createAdminRouteWithBasePath(
-                                `/dashboard/events/${event.id}`
+                              href={createPublicUrl(
+                                `/eventos/${event.slug || event.id}`
                               )}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="text-gray-400 hover:text-gray-600"
-                              title="Ver evento"
+                              title="Ver evento (abre en nueva pestaña)"
                             >
                               <Eye className="h-4 w-4" />
                             </a>

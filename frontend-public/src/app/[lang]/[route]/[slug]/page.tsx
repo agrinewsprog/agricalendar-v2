@@ -66,7 +66,6 @@ export async function generateMetadata({
     const seoKeywords =
       (event as any).keywords ||
       `${event.tipo}, evento, ${event.location}, ${event.name}`;
-    const ogImage = (event as any).ogImage || event.image;
 
     // Obtener la URL base del dominio
     const baseUrl =
@@ -74,6 +73,24 @@ export async function generateMetadata({
       (process.env.NODE_ENV === "production"
         ? "https://agricalendar.net"
         : "http://localhost:3000");
+
+    // Debug: log para verificar qué URL se está usando
+    console.log("🔍 Meta debug:", {
+      NODE_ENV: process.env.NODE_ENV,
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      baseUrl: baseUrl,
+      rawImage: (event as any).ogImage || event.image,
+    });
+
+    // Procesar la imagen para URL absoluta
+    const rawImage = (event as any).ogImage || event.image;
+    const absoluteImageUrl = rawImage
+      ? rawImage.startsWith("http")
+        ? rawImage
+        : `${baseUrl}/uploads/${rawImage}`
+      : null;
+
+    console.log("🖼️ Image URL result:", absoluteImageUrl);
 
     const eventUrl = `${baseUrl}/${resolvedParams.lang}/${resolvedParams.route}/${resolvedParams.slug}`;
 
@@ -100,10 +117,10 @@ export async function generateMetadata({
         description: seoDescription,
         url: eventUrl,
         siteName: "AgriCalendar",
-        images: ogImage
+        images: absoluteImageUrl
           ? [
               {
-                url: ogImage,
+                url: absoluteImageUrl,
                 width: 1200,
                 height: 630,
                 alt: event.name,
@@ -117,7 +134,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title: seoTitle,
         description: seoDescription,
-        images: ogImage ? [ogImage] : [],
+        images: absoluteImageUrl ? [absoluteImageUrl] : [],
         creator: "@agricalendar",
       },
       robots: {

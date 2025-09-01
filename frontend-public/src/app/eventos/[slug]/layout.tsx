@@ -38,14 +38,24 @@ export async function generateMetadata({
     const event = response.data;
     const baseUrl = getBaseUrl();
     const eventUrl = `${baseUrl}/eventos/${event.slug}`;
-    const imageUrl = event.image ? getEventImageUrl(event.image) : null;
 
-    // Si la imagen es una URL relativa, convertirla a absoluta
-    const absoluteImageUrl = imageUrl
-      ? imageUrl.startsWith("http")
-        ? imageUrl
-        : `${baseUrl}${imageUrl}`
+    // Debug: log para verificar qué URL se está usando
+    console.log("🔍 Layout Meta debug:", {
+      NODE_ENV: process.env.NODE_ENV,
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      baseUrl: baseUrl,
+      rawImage: event.image,
+    });
+
+    // Procesar la imagen para URL absoluta
+    const rawImage = event.image;
+    const absoluteImageUrl = rawImage
+      ? rawImage.startsWith("http")
+        ? rawImage
+        : `${baseUrl}/uploads/${rawImage}`
       : null;
+
+    console.log("🖼️ Layout Image URL result:", absoluteImageUrl);
 
     return {
       title: event.seoTitle || event.name || "Evento",

@@ -97,6 +97,22 @@ export const createAbsoluteAdminUrl = (path: string): string => {
   return `${baseUrl}${basePath}${cleanPath}`;
 };
 
+/**
+ * Create a URL for the public frontend (to view events publicly)
+ * @param path - The path relative to the public frontend
+ * @returns URL to the public frontend
+ */
+export const createPublicUrl = (path: string): string => {
+  // Get the public frontend base URL
+  const publicBaseUrl = process.env.NEXT_PUBLIC_PUBLIC_FRONTEND_URL || 
+    (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+      ? 'http://localhost:3000' 
+      : 'https://agricalendar.net');
+  
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${publicBaseUrl}${cleanPath}`;
+};
+
 // Common admin routes
 export const ADMIN_ROUTES = {
   DASHBOARD: '/dashboard',
