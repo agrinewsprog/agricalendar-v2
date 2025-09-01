@@ -2,14 +2,6 @@
  * Utility for handling admin routes with proper basePath in production
  */
 
-/**
- * Utility for handling admin routes with proper basePath in production
- */
-
-/**
- * Utility for handling admin routes with proper basePath in production
- */
-
 // Get the base path for admin routes
 const getAdminBasePath = (): string => {
   if (typeof window !== 'undefined') {
@@ -19,8 +11,23 @@ const getAdminBasePath = (): string => {
     return isLocalhost ? '' : '/admin';
   }
   
-  // Server-side: use environment variable
-  return process.env.NODE_ENV === 'production' ? '/admin' : '';
+  // Server-side: use environment variable or fallback
+  return process.env.NEXT_PUBLIC_BASE_PATH || 
+         (process.env.NODE_ENV === 'production' ? '/admin' : '');
+};
+
+/**
+ * Get the base URL for the application
+ */
+const getAppBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    // Client-side: get current origin
+    return window.location.origin;
+  }
+  
+  // Server-side: use environment variable or fallback
+  return process.env.NEXT_PUBLIC_APP_URL || 
+         (process.env.NODE_ENV === 'production' ? 'https://agricalendar.net' : 'http://localhost:3001');
 };
 
 /**
@@ -76,6 +83,18 @@ export const navigateToAdminRoute = (router: any, path: string): void => {
 export const redirectToAdminRoute = (path: string): void => {
   const fullPath = createAdminRouteWithBasePath(path);
   window.location.href = fullPath;
+};
+
+/**
+ * Create an absolute URL for admin routes (useful for meta tags, og:url, etc.)
+ * @param path - The path relative to admin
+ * @returns Absolute URL with proper basePath
+ */
+export const createAbsoluteAdminUrl = (path: string): string => {
+  const baseUrl = getAppBaseUrl();
+  const basePath = getAdminBasePath();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${baseUrl}${basePath}${cleanPath}`;
 };
 
 // Common admin routes

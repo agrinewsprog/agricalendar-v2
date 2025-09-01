@@ -301,14 +301,18 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <a
-                              href={`/dashboard/events/${event.id}`}
+                              href={createAdminRouteWithBasePath(
+                                `/dashboard/events/${event.id}`
+                              )}
                               className="text-gray-400 hover:text-gray-600"
                               title="Ver evento"
                             >
                               <Eye className="h-4 w-4" />
                             </a>
                             <a
-                              href={`/dashboard/events/${event.id}/edit`}
+                              href={createAdminRouteWithBasePath(
+                                ADMIN_ROUTES.EVENTS_EDIT(event.id.toString())
+                              )}
                               className="text-blue-400 hover:text-blue-600"
                               title="Editar evento"
                             >
