@@ -31,6 +31,7 @@ export const getAllEvents = async (req: Request, res: Response) => {
       },
       include: {
         language: true,
+        especie: true,
         translations: {
           where: { 
             language: { 
@@ -135,6 +136,7 @@ export const getAdminEvents = async (req: Request, res: Response) => {
       where: whereClause,
       include: {
         language: true,
+        especie: true,
         user: {
           select: { id: true, name: true, username: true, email: true }
         },
@@ -206,6 +208,7 @@ export const getEventBySlug = async (req: Request, res: Response) => {
       },
       include: {
         language: true,
+        especie: true,
         user: {
           select: { id: true, name: true, username: true }
         },
@@ -244,8 +247,9 @@ export const getEventBySlug = async (req: Request, res: Response) => {
     
     if (event.translations && event.translations.length > 0) {
       const translation = event.translations[0];
+      // Solo sobrescribir los campos que están traducidos, mantener el resto
       translatedEvent = {
-        ...event,
+        ...event, // Mantener TODOS los campos originales del evento
         name: translation.name || event.name,
         description: translation.description || event.description,
         location: translation.location || event.location,
@@ -253,14 +257,15 @@ export const getEventBySlug = async (req: Request, res: Response) => {
       };
     }
 
-    // Si hay metadatos SEO disponibles, agregarlos al evento
+    // Si hay metadatos SEO disponibles, usar esos valores si los campos del evento están vacíos
     if (event.seoMetadata && event.seoMetadata.length > 0) {
       const seoData = event.seoMetadata[0];
-      // Agregar datos SEO como propiedades adicionales
-      (translatedEvent as any).seoTitle = seoData.title;
-      (translatedEvent as any).seoDesc = seoData.description;
-      (translatedEvent as any).keywords = seoData.keywords;
-      (translatedEvent as any).ogImage = seoData.ogImage;
+      // Solo actualizar si los campos del evento están vacíos
+      translatedEvent = {
+        ...translatedEvent,
+        seoTitle: translatedEvent.seoTitle || seoData.title,
+        seoDesc: translatedEvent.seoDesc || seoData.description
+      };
     }
 
     res.json({
@@ -293,6 +298,7 @@ export const getAdminEventById = async (req: Request, res: Response) => {
       where: { id: parseInt(id) },
       include: {
         language: true,
+        especie: true,
         user: {
           select: { id: true, name: true, username: true }
         },
@@ -382,6 +388,7 @@ export const createEvent = async (req: Request, res: Response) => {
       website,
       status = 'DRAFT',
       languageId,
+      especieId,
       organizerName,
       organizerEmail,
       organizerPhone,
@@ -477,6 +484,7 @@ export const createEvent = async (req: Request, res: Response) => {
         slug,
         status: status as any,
         languageId: parseInt(languageId),
+        especieId: especieId ? parseInt(especieId) : null,
         userId,
         organizerName,
         organizerEmail,
@@ -491,6 +499,7 @@ export const createEvent = async (req: Request, res: Response) => {
       },
       include: {
         language: true,
+        especie: true,
         user: {
           select: { id: true, name: true, username: true }
         }
@@ -543,16 +552,65 @@ export const updateEvent = async (req: Request, res: Response) => {
 
     const updateData = req.body;
 
+    // Preparar datos para actualización con validaciones
+    const dataToUpdate: any = {
+      ...updateData,
+      updatedAt: new Date()
+    };
+
+    // Manejar fechas correctamente
+    if (updateData.startDate) {
+      dataToUpdate.startDate = new Date(updateData.startDate);
+    }
+    
+    if (updateData.endDate) {
+      dataToUpdate.endDate = new Date(updateData.endDate);
+    }
+
+    // Manejar registrationDeadline - solo si tiene valor válido
+    if (updateData.registrationDeadline) {
+      if (updateData.registrationDeadline.trim() !== '') {
+        dataToUpdate.registrationDeadline = new Date(updateData.registrationDeadline);
+      } else {
+        dataToUpdate.registrationDeadline = null;
+      }
+    } else {
+      dataToUpdate.registrationDeadline = null;
+    }
+
+    // Manejar campos numéricos opcionales
+    if (updateData.maxAttendees !== undefined) {
+      if (updateData.maxAttendees === '' || updateData.maxAttendees === null) {
+        dataToUpdate.maxAttendees = null;
+      } else {
+        dataToUpdate.maxAttendees = parseInt(updateData.maxAttendees);
+      }
+    }
+
+    // Manejar especieId
+    if (updateData.especieId !== undefined) {
+      if (updateData.especieId === '' || updateData.especieId === null) {
+        dataToUpdate.especieId = null;
+      } else {
+        dataToUpdate.especieId = parseInt(updateData.especieId);
+      }
+    }
+
+    // Limpiar campos de string vacíos y convertirlos a null
+    const stringFields = ['endDate', 'startTime', 'endTime', 'location', 'address', 'state', 'region', 'website', 'color', 'tipo', 'organizerName', 'organizerEmail', 'organizerPhone', 'registro', 'seoTitle', 'seoDesc'];
+    
+    stringFields.forEach(field => {
+      if (updateData[field] !== undefined && updateData[field] === '') {
+        dataToUpdate[field] = null;
+      }
+    });
+
     const event = await prisma.event.update({
       where: { id: parseInt(id) },
-      data: {
-        ...updateData,
-        ...(updateData.startDate && { startDate: new Date(updateData.startDate) }),
-        ...(updateData.endDate && { endDate: new Date(updateData.endDate) }),
-        updatedAt: new Date()
-      },
+      data: dataToUpdate,
       include: {
         language: true,
+        especie: true,
         user: {
           select: { id: true, name: true, username: true }
         }

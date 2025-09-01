@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardLayout from "@/components/DashboardLayout";
+import SpeciesSelector from "@/components/SpeciesSelector";
 import { eventsService, languagesService } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +32,7 @@ const eventSchema = z.object({
   color: z.string().optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
   languageId: z.string().min(1, "El idioma es requerido"),
+  especieId: z.string().optional(),
   tipo: z.string().optional(),
   organizerName: z.string().optional(),
   organizerEmail: z
@@ -74,6 +76,7 @@ export default function CreateEventPage() {
   const [loading, setLoading] = useState(false);
   const [languages, setLanguages] = useState<any[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [autoColor, setAutoColor] = useState<string | null>(null);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -161,6 +164,25 @@ export default function CreateEventPage() {
     }
   };
 
+  const handleSpeciesChange = (
+    especieId: number | undefined,
+    color?: string
+  ) => {
+    if (especieId) {
+      setValue("especieId", especieId.toString());
+    } else {
+      setValue("especieId", "");
+    }
+
+    if (color) {
+      setValue("color", color);
+      setAutoColor(color);
+    } else {
+      setValue("color", eventColors[0]);
+      setAutoColor(null);
+    }
+  };
+
   const onSubmit = async (data: EventFormData) => {
     try {
       setLoading(true);
@@ -173,6 +195,8 @@ export default function CreateEventPage() {
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           if (key === "languageId") {
+            formData.append(key, parseInt(value as string).toString());
+          } else if (key === "especieId" && value) {
             formData.append(key, parseInt(value as string).toString());
           } else if (key === "maxAttendees" && value) {
             formData.append(key, parseInt(value as string).toString());
@@ -353,33 +377,13 @@ export default function CreateEventPage() {
                     </select>
                   </div>
 
-                  {/* Color */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Color del evento
-                    </label>
-                    <div className="mt-1 flex items-center space-x-2">
-                      <input
-                        type="color"
-                        {...register("color")}
-                        className="h-10 w-20 border border-gray-300 rounded-md cursor-pointer"
-                      />
-                      <div className="flex space-x-1">
-                        {eventColors.map((color) => (
-                          <button
-                            key={color}
-                            type="button"
-                            onClick={() => setValue("color", color)}
-                            className={`w-6 h-6 rounded-full border-2 ${
-                              watchColor === color
-                                ? "border-gray-900"
-                                : "border-gray-300"
-                            }`}
-                            style={{ backgroundColor: color }}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                  {/* Species Selector */}
+                  <div className="sm:col-span-2">
+                    <SpeciesSelector
+                      value={watch("especieId")}
+                      onChange={handleSpeciesChange}
+                      error={errors.especieId?.message}
+                    />
                   </div>
                 </div>
               </div>

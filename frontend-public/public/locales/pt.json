@@ -86,6 +86,9 @@
     "organizerInfo": "Informações do organizador",
     "createdBy": "Criado por",
     "username": "Usuário",
+    "organizer": "Organizador",
+    "email": "Email",
+    "phone": "Telefone",
     "relatedEvents": "Eventos relacionados",
     "relatedEventsComingSoon": "Em breve mostraremos eventos relacionados."
   },

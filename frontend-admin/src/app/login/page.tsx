@@ -168,25 +168,6 @@ export default function LoginPage() {
               </button>
             </div>
           </form>
-
-          {/* Default credentials hint */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-            <h4 className="text-sm font-medium text-blue-800 mb-2">
-              Credenciales por defecto:
-            </h4>
-            <p className="text-sm text-blue-700">
-              Email:{" "}
-              <code className="bg-blue-100 px-1 rounded">
-                admin@agricalendar.com
-              </code>
-              <br />
-              Contraseña:{" "}
-              <code className="bg-blue-100 px-1 rounded">admin123</code>
-            </p>
-            <p className="text-xs text-blue-600 mt-2">
-              ⚠️ Cambia estas credenciales después del primer login
-            </p>
-          </div>
         </div>
       </div>
     </div>

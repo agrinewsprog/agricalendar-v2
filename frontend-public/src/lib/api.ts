@@ -10,6 +10,28 @@ const api = axios.create({
   },
 })
 
+// Función para hacer reintentos automáticos
+const retryRequest = async (fn: () => Promise<any>, maxRetries = 2, delay = 1000): Promise<any> => {
+  for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
+    try {
+      return await fn()
+    } catch (error: any) {
+      const isLastAttempt = attempt === maxRetries + 1
+      const shouldRetry = error.code === 'ECONNREFUSED' || 
+                         error.code === 'ECONNABORTED' || 
+                         error.response?.status >= 500 ||
+                         !error.response // Network error
+
+      if (isLastAttempt || !shouldRetry) {
+        throw error
+      }
+
+      console.log(`API request failed (attempt ${attempt}/${maxRetries + 1}), retrying in ${delay}ms...`)
+      await new Promise(resolve => setTimeout(resolve, delay * attempt)) // Exponential backoff
+    }
+  }
+}
+
 // Interceptor para manejar errores globalmente
 api.interceptors.response.use(
   (response) => response,
@@ -21,6 +43,7 @@ api.interceptors.response.use(
         method: error.config?.method,
         status: error.response?.status,
         message: error.message,
+        code: error.code,
       })
     }
     return Promise.reject(error)
@@ -105,51 +128,61 @@ export const eventsService = {
     startDate?: string
     endDate?: string
   }): Promise<ApiResponse<Event[]>> => {
-    const response = await api.get('/events', { params })
-    return response.data
+    return retryRequest(async () => {
+      const response = await api.get('/events', { params })
+      return response.data
+    })
   },
 
   // Obtener evento por slug
   getBySlug: async (slug: string, language?: string): Promise<ApiResponse<Event>> => {
-    try {
-      const response = await api.get(`/events/${slug}`, {
-        params: { language }
-      })
-      return response.data
-    } catch (error: any) {
-      // Si es un 404, retornar una respuesta controlada
-      if (error.response?.status === 404) {
-        return {
-          success: false,
-          data: null as any,
-          error: 'Evento no encontrado'
+    return retryRequest(async () => {
+      try {
+        const response = await api.get(`/events/${slug}`, {
+          params: { language }
+        })
+        return response.data
+      } catch (error: any) {
+        // Si es un 404, retornar una respuesta controlada
+        if (error.response?.status === 404) {
+          return {
+            success: false,
+            data: null as any,
+            error: 'Evento no encontrado'
+          }
         }
+        // Para otros errores, re-lanzar para que el retry funcione
+        throw error
       }
-      // Para otros errores, re-lanzar
-      throw error
-    }
+    })
   },
 }
 
 export const languagesService = {
   // Obtener todos los idiomas
   getAll: async (): Promise<ApiResponse<Language[]>> => {
-    const response = await api.get('/languages')
-    return response.data
+    return retryRequest(async () => {
+      const response = await api.get('/languages')
+      return response.data
+    })
   },
 
   // Obtener idioma por defecto
   getDefault: async (): Promise<ApiResponse<Language>> => {
-    const response = await api.get('/languages/default')
-    return response.data
+    return retryRequest(async () => {
+      const response = await api.get('/languages/default')
+      return response.data
+    })
   },
 }
 
 export const healthService = {
   // Health check
   check: async () => {
-    const response = await api.get('/health')
-    return response.data
+    return retryRequest(async () => {
+      const response = await api.get('/health')
+      return response.data
+    })
   },
 }
 

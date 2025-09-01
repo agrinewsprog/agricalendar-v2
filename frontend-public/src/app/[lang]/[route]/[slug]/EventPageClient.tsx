@@ -2,6 +2,7 @@
 
 import { eventsService, type Event } from "@/lib/api";
 import { formatDateRange } from "@/lib/utils";
+import { getEventImageUrl } from "@/lib/imageUtils";
 import {
   Calendar,
   MapPin,
@@ -15,6 +16,29 @@ import Link from "next/link";
 import { useLanguage } from "@/context/useLanguage";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+// Función para arreglar texto mal codificado
+const fixEncoding = (text: string): string => {
+  if (!text) return text;
+
+  try {
+    // Intenta decodificar si está mal codificado
+    return decodeURIComponent(escape(text));
+  } catch {
+    // Si falla, aplica correcciones manuales básicas
+    return text
+      .replace(/Ã¡/g, "á")
+      .replace(/Ã©/g, "é")
+      .replace(/Ã­/g, "í")
+      .replace(/Ã³/g, "ó")
+      .replace(/Ãº/g, "ú")
+      .replace(/Ã±/g, "ñ")
+      .replace(/Ã§/g, "ç")
+      .replace(/Âº/g, "º")
+      .replace(/Âª/g, "ª")
+      .replace(/Â°/g, "°");
+  }
+};
 
 interface EventPageProps {
   params: Promise<{
@@ -187,6 +211,21 @@ export default function EventPageClient({ params }: EventPageProps) {
         <div className="max-w-4xl mx-auto">
           {/* Event Header */}
           <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
+            {/* Event Image - Full width at the top */}
+            {event.image && (
+              <div className="mb-8 -m-8 mb-8">
+                <img
+                  src={getEventImageUrl(event.image) || undefined}
+                  alt={event.name}
+                  className="w-full h-64 md:h-80 object-cover rounded-t-lg"
+                  onError={(e) => {
+                    // Ocultar imagen si no se puede cargar
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              </div>
+            )}
+
             <div className="flex items-start justify-between mb-6">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-4">
@@ -213,12 +252,12 @@ export default function EventPageClient({ params }: EventPageProps) {
                 </div>
 
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                  {event.name}
+                  {fixEncoding(event.name)}
                 </h1>
 
                 {event.description && (
                   <p className="text-lg text-gray-600 leading-relaxed">
-                    {event.description}
+                    {fixEncoding(event.description)}
                   </p>
                 )}
               </div>
@@ -261,10 +300,13 @@ export default function EventPageClient({ params }: EventPageProps) {
                     <h3 className="font-semibold text-gray-900 mb-1">
                       {t("eventDetails.location")}
                     </h3>
-                    <p className="text-gray-600">{event.location}</p>
+                    <p className="text-gray-600">
+                      {fixEncoding(event.location)}
+                    </p>
                     {event.state && (
                       <p className="text-sm text-gray-500">
-                        {event.state}, {event.region}
+                        {fixEncoding(event.state || "")},{" "}
+                        {fixEncoding(event.region || "")}
                       </p>
                     )}
                   </div>
@@ -278,7 +320,9 @@ export default function EventPageClient({ params }: EventPageProps) {
                     <h3 className="font-semibold text-gray-900 mb-1">
                       {t("eventDetails.registration")}
                     </h3>
-                    <p className="text-gray-600">{event.registro}</p>
+                    <p className="text-gray-600">
+                      {fixEncoding(event.registro)}
+                    </p>
                   </div>
                 </div>
               )}
@@ -310,10 +354,6 @@ export default function EventPageClient({ params }: EventPageProps) {
                 </a>
               )}
 
-              <button className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium">
-                {t("eventDetails.shareEvent")}
-              </button>
-
               <button className="border border-green-600 text-green-600 px-6 py-3 rounded-md hover:bg-green-50 transition-colors font-medium">
                 {t("eventDetails.addToCalendar")}
               </button>
@@ -330,7 +370,9 @@ export default function EventPageClient({ params }: EventPageProps) {
                 </h2>
                 <div className="prose max-w-none">
                   <p className="text-gray-600 leading-relaxed">
-                    {event.description || t("eventDetails.noAdditionalInfo")}
+                    {event.description
+                      ? fixEncoding(event.description)
+                      : t("eventDetails.noAdditionalInfo")}
                   </p>
                 </div>
               </div>
@@ -338,26 +380,57 @@ export default function EventPageClient({ params }: EventPageProps) {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Organizer Info */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">
-                  {t("eventDetails.organizerInfo")}
-                </h3>
-                <div className="space-y-2">
-                  <p className="text-gray-600">
-                    <span className="font-medium">
-                      {t("eventDetails.createdBy")}:
-                    </span>{" "}
-                    {event.user.name}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">
-                      {t("eventDetails.username")}:
-                    </span>{" "}
-                    @{event.user.username}
-                  </p>
+              {/* Organizer Info - Solo mostrar si hay información específica del organizador */}
+              {(event.organizerName ||
+                event.organizerEmail ||
+                event.organizerPhone) && (
+                <div className="bg-white rounded-lg shadow-sm border p-6">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">
+                    {t("eventDetails.organizerInfo")}
+                  </h3>
+                  <div className="space-y-2">
+                    {/* Mostrar organizador específico */}
+                    {event.organizerName && (
+                      <p className="text-gray-600">
+                        <span className="font-medium">
+                          {t("eventDetails.organizer")}:
+                        </span>{" "}
+                        {fixEncoding(event.organizerName)}
+                      </p>
+                    )}
+
+                    {/* Email del organizador si existe */}
+                    {event.organizerEmail && (
+                      <p className="text-gray-600">
+                        <span className="font-medium">
+                          {t("eventDetails.email")}:
+                        </span>{" "}
+                        <a
+                          href={`mailto:${event.organizerEmail}`}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          {event.organizerEmail}
+                        </a>
+                      </p>
+                    )}
+
+                    {/* Teléfono del organizador si existe */}
+                    {event.organizerPhone && (
+                      <p className="text-gray-600">
+                        <span className="font-medium">
+                          {t("eventDetails.phone")}:
+                        </span>{" "}
+                        <a
+                          href={`tel:${event.organizerPhone}`}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          {event.organizerPhone}
+                        </a>
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Related Events */}
               <div className="bg-white rounded-lg shadow-sm border p-6">

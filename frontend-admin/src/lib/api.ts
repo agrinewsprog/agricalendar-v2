@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'https://agricalendar.net/api/'
+const API_BASE_URL = 'http://localhost:5000/api/'
 
 // Configurar axios
 const api = axios.create({
@@ -70,6 +70,14 @@ export interface ApiResponse<T = any> {
   }
 }
 
+export interface Especie {
+  id: number
+  nombre: string
+  color: string
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Event {
   id: number
   name: string
@@ -91,6 +99,7 @@ export interface Event {
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'CANCELLED'
   languageId: number
   userId: number
+  especieId?: number
   organizerName?: string
   organizerEmail?: string
   organizerPhone?: string
@@ -113,6 +122,7 @@ export interface Event {
     name: string
     username: string
   }
+  especie?: Especie
 }
 
 export interface CreateEventData {
@@ -134,6 +144,7 @@ export interface CreateEventData {
   slug?: string
   status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'CANCELLED'
   languageId: number
+  especieId?: number
   organizerName?: string
   organizerEmail?: string
   organizerPhone?: string
@@ -446,6 +457,22 @@ export const seoService = {
   // Generar metadata SEO automática basada en el contenido del evento
   async generateAutoSeo(eventId: number, languageId: number): Promise<ApiResponse<SeoMetadata>> {
     const response = await api.post(`/events/${eventId}/seo/${languageId}/auto`)
+    return response.data
+  }
+}
+
+// === SPECIES SERVICES ===
+
+export const speciesService = {
+  // Obtener todas las especies disponibles
+  async getAll(): Promise<ApiResponse<Especie[]>> {
+    const response = await api.get('/species')
+    return response.data
+  },
+
+  // Obtener una especie por ID
+  async getById(id: number): Promise<ApiResponse<Especie>> {
+    const response = await api.get(`/species/${id}`)
     return response.data
   }
 }

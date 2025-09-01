@@ -1,135 +1,129 @@
-// AgriCalendar Database Schema - Optimized from PHP version
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// === CORE MODELS ===
-
 model Language {
-  id        Int      @id @default(autoincrement()) @map("id_idioma")
-  name      String   @db.VarChar(100)
-  code      String   @unique @db.VarChar(5) // ISO code: es, en, fr, de
-  isActive  Boolean  @default(true) @map("is_active")
-  isDefault Boolean  @default(false) @map("is_default")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  events            Event[]
+  id                Int                @id @default(autoincrement()) @map("id_idioma")
+  name              String             @db.VarChar(100)
+  code              String             @unique @db.VarChar(5)
+  isActive          Boolean            @default(true) @map("is_active")
+  isDefault         Boolean            @default(false) @map("is_default")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
   eventTranslations EventTranslation[]
+  events            Event[]
   seoMetadata       SeoMetadata[]
 
   @@map("languages")
 }
 
+model Especie {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @unique @db.VarChar(100)
+  color     String    @db.VarChar(7)
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @default(now()) @db.Timestamp(6)
+  events    Event[]
+
+  @@map("especies")
+}
+
 model Event {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  image       String?   @db.VarChar(500)
-  startDate   DateTime  @map("start_date") @db.Date
-  endDate     DateTime? @map("end_date") @db.Date
-  startTime   String?   @map("start_time") @db.VarChar(10)
-  endTime     String?   @map("end_time") @db.VarChar(10)
-  color       String?   @db.VarChar(7) // Hex color
-  location    String?   @db.VarChar(255)
-  address     String?   @db.VarChar(500) // Full address
-  description String?   @db.Text
-  state       String?   @db.VarChar(100)
-  region      String?   @db.VarChar(100)
-  tipo        String?   @db.VarChar(100) // Event type
-  website     String?   @db.VarChar(500)
-  slug        String    @unique @map("slugevento") @db.VarChar(255)
-  status      EventStatus @default(DRAFT)
-  languageId  Int       @map("idioma") // Original language
-  userId      Int       @map("user_id") // Creator
-  
-  // Organizer information
-  organizerName  String? @map("organizer_name") @db.VarChar(255)
-  organizerEmail String? @map("organizer_email") @db.VarChar(255)
-  organizerPhone String? @map("organizer_phone") @db.VarChar(50)
-  
-  // Registration details
-  maxAttendees         Int?      @map("max_attendees")
-  registrationRequired Boolean   @default(false) @map("registration_required")
-  registrationDeadline DateTime? @map("registration_deadline")
-  
-  // Tags for categorization
-  tags        Json?     // Array of strings
-  
-  registro    String?   @db.VarChar(500) // Registration info
-  seoTitle    String?   @map("seo_title") @db.VarChar(255)
-  seoDesc     String?   @map("seo_desc") @db.VarChar(500)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  id                   Int                @id @default(autoincrement())
+  name                 String             @db.VarChar(255)
+  image                String?            @db.VarChar(500)
+  startDate            DateTime           @map("start_date") @db.Date
+  endDate              DateTime?          @map("end_date") @db.Date
+  startTime            String?            @map("start_time") @db.VarChar(10)
+  endTime              String?            @map("end_time") @db.VarChar(10)
+  color                String?            @db.VarChar(7)
+  location             String?            @db.VarChar(255)
+  address              String?            @db.VarChar(500)
+  description          String?
+  state                String?            @db.VarChar(100)
+  region               String?            @db.VarChar(100)
+  tipo                 String?            @db.VarChar(100)
+  website              String?            @db.VarChar(500)
+  slug                 String             @unique @map("slugevento") @db.VarChar(255)
+  status               EventStatus        @default(DRAFT)
+  languageId           Int                @map("idioma")
+  userId               Int                @map("user_id")
+  organizerName        String?            @map("organizer_name") @db.VarChar(255)
+  organizerEmail       String?            @map("organizer_email") @db.VarChar(255)
+  organizerPhone       String?            @map("organizer_phone") @db.VarChar(50)
+  maxAttendees         Int?               @map("max_attendees")
+  registrationRequired Boolean            @default(false) @map("registration_required")
+  registrationDeadline DateTime?          @map("registration_deadline")
+  tags                 Json?
+  registro             String?            @db.VarChar(500)
+  seoTitle             String?            @map("seo_title") @db.VarChar(255)
+  seoDesc              String?            @map("seo_desc") @db.VarChar(500)
+  createdAt            DateTime           @default(now()) @map("created_at")
+  updatedAt            DateTime           @updatedAt @map("updated_at")
+  especieId            Int?
+  translations         EventTranslation[]
+  language             Language           @relation(fields: [languageId], references: [id])
+  user                 User               @relation(fields: [userId], references: [id])
+  especie              Especie?           @relation(fields: [especieId], references: [id])
+  seoMetadata          SeoMetadata[]
 
-  // Relations
-  language     Language            @relation(fields: [languageId], references: [id])
-  user         User                @relation(fields: [userId], references: [id])
-  translations EventTranslation[]
-  seoMetadata  SeoMetadata[]
-
+  @@index([especieId], map: "idx_events_especie")
   @@map("events")
 }
 
 model EventTranslation {
-  id          Int    @id @default(autoincrement())
-  eventId     Int    @map("event_id")
-  languageId  Int    @map("language_id")
-  name        String @db.VarChar(255)
-  description String? @db.Text
-  location    String? @db.VarChar(255)
-  slug        String @db.VarChar(255)
-  isAuto      Boolean @default(false) @map("is_auto_translated")
+  id          Int      @id @default(autoincrement())
+  eventId     Int      @map("event_id")
+  languageId  Int      @map("language_id")
+  name        String   @db.VarChar(255)
+  description String?
+  location    String?  @db.VarChar(255)
+  slug        String   @db.VarChar(255)
+  isAuto      Boolean  @default(false) @map("is_auto_translated")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  language Language @relation(fields: [languageId], references: [id])
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  language    Language @relation(fields: [languageId], references: [id])
 
   @@unique([eventId, languageId])
   @@map("event_translations")
 }
 
 model SeoMetadata {
-  id         Int    @id @default(autoincrement())
-  eventId    Int    @map("event_id")
-  languageId Int    @map("language_id")
-  title      String @db.VarChar(255) @map("seo_title")
-  description String @db.VarChar(500) @map("seo_desc")
-  keywords   String? @db.VarChar(500)
-  ogImage    String? @db.VarChar(500) @map("og_image")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  language Language @relation(fields: [languageId], references: [id])
+  id          Int      @id @default(autoincrement())
+  eventId     Int      @map("event_id")
+  languageId  Int      @map("language_id")
+  title       String   @map("seo_title") @db.VarChar(255)
+  description String   @map("seo_desc") @db.VarChar(500)
+  keywords    String?  @db.VarChar(500)
+  ogImage     String?  @map("og_image") @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  language    Language @relation(fields: [languageId], references: [id])
 
   @@unique([eventId, languageId])
   @@map("seo_metadata")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  username  String   @unique @db.VarChar(100)
-  email     String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  salt      String?  @db.VarChar(255) // For compatibility with PHP
-  role      UserRole @default(ADMIN)
-  state     UserState @default(ACTIVE)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  events Event[]
-  sessions UserSession[]
+  id        Int           @id @default(autoincrement())
+  name      String        @db.VarChar(255)
+  username  String        @unique @db.VarChar(100)
+  email     String        @unique @db.VarChar(255)
+  password  String        @db.VarChar(255)
+  salt      String?       @db.VarChar(255)
+  role      UserRole      @default(ADMIN)
+  state     UserState     @default(ACTIVE)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  events    Event[]
+  sessions  UserSession[]
 
   @@map("users")
 }
@@ -140,14 +134,10 @@ model UserSession {
   token     String   @unique @db.VarChar(500)
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_sessions")
 }
-
-// === ENUMS ===
 
 enum EventStatus {
   DRAFT
