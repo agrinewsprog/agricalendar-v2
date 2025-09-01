@@ -23,6 +23,7 @@ import {
   createAdminRoute,
   createAdminRouteWithBasePath,
   ADMIN_ROUTES,
+  redirectToAdminRoute,
 } from "@/lib/adminRoutes";
 import { getEventImageUrl } from "@/lib/imageUtils";
 
@@ -205,8 +206,8 @@ export default function EventsPage() {
 
   // Función para editar evento
   const handleEditEvent = (event: Event) => {
-    // Navegar a página de edición
-    window.location.href = `/dashboard/events/edit/${event.id}`;
+    // Navegar a página de edición usando la ruta de admin correcta
+    redirectToAdminRoute(ADMIN_ROUTES.EVENTS_EDIT(event.id.toString()));
   };
 
   // Función para confirmar eliminación
