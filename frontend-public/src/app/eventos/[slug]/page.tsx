@@ -16,7 +16,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useLanguage } from "@/context/useLanguage";
 import { useState, useEffect } from "react";
-import Head from "next/head";
 
 interface EventPageProps {
   params: Promise<{
@@ -119,35 +118,6 @@ export default function EventPage({ params }: EventPageProps) {
 
   return (
     <>
-      <Head>
-        <title>{event.seoTitle || event.name || "Evento"}</title>
-        <meta
-          name="description"
-          content={
-            event.seoDesc || event.description || `Evento: ${event.name}`
-          }
-        />
-        <meta property="og:title" content={event.seoTitle || event.name} />
-        <meta
-          property="og:description"
-          content={
-            event.seoDesc || event.description || `Evento: ${event.name}`
-          }
-        />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
-        <meta property="og:type" content="event" />
-        <meta
-          property="og:url"
-          content={`${window?.location?.origin}/eventos/${event.slug}`}
-        />
-        {event.tags && <meta name="keywords" content={event.tags} />}
-        <meta name="robots" content="index, follow" />
-        <link
-          rel="canonical"
-          href={`${window?.location?.origin}/eventos/${event.slug}`}
-        />
-      </Head>
-
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <header className="bg-white shadow-sm border-b">

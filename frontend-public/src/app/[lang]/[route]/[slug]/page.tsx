@@ -56,7 +56,6 @@ export async function generateMetadata({
 
     const event = response.data;
     const currentRoute = LANGUAGE_ROUTES[resolvedParams.lang] || "events";
-    const eventUrl = `https://agricalendar.com/${resolvedParams.lang}/${currentRoute}/${resolvedParams.slug}`;
 
     // Obtener metadatos SEO si existen
     const seoTitle = (event as any).seoTitle || event.name;
@@ -69,6 +68,15 @@ export async function generateMetadata({
       `${event.tipo}, evento, ${event.location}, ${event.name}`;
     const ogImage = (event as any).ogImage || event.image;
 
+    // Obtener la URL base del dominio
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      (process.env.NODE_ENV === "production"
+        ? "https://agricalendar.net"
+        : "http://localhost:3000");
+
+    const eventUrl = `${baseUrl}/${resolvedParams.lang}/${resolvedParams.route}/${resolvedParams.slug}`;
+
     return {
       title: `${seoTitle} | AgriCalendar`,
       description: seoDescription,
@@ -79,12 +87,12 @@ export async function generateMetadata({
       alternates: {
         canonical: eventUrl,
         languages: {
-          es: `https://agricalendar.com/es/eventos/${resolvedParams.slug}`,
-          en: `https://agricalendar.com/en/events/${resolvedParams.slug}`,
-          pt: `https://agricalendar.com/pt/eventos/${resolvedParams.slug}`,
-          vi: `https://agricalendar.com/vi/su-kien/${resolvedParams.slug}`,
-          th: `https://agricalendar.com/th/events/${resolvedParams.slug}`,
-          id: `https://agricalendar.com/id/acara/${resolvedParams.slug}`,
+          es: `${baseUrl}/es/eventos/${resolvedParams.slug}`,
+          en: `${baseUrl}/en/events/${resolvedParams.slug}`,
+          pt: `${baseUrl}/pt/eventos/${resolvedParams.slug}`,
+          vi: `${baseUrl}/vi/su-kien/${resolvedParams.slug}`,
+          th: `${baseUrl}/th/events/${resolvedParams.slug}`,
+          id: `${baseUrl}/id/acara/${resolvedParams.slug}`,
         },
       },
       openGraph: {
