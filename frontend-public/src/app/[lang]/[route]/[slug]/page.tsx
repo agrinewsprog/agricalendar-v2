@@ -62,10 +62,12 @@ export async function generateMetadata({
     const seoDescription =
       (event as any).seoDesc ||
       event.description ||
-      `${event.name} - ${event.location}`;
+      `${event.name} - ${event.location || "Evento"}`;
     const seoKeywords =
       (event as any).keywords ||
-      `${event.tipo}, evento, ${event.location}, ${event.name}`;
+      `${event.tipo || "evento"}, ${event.location || ""}, ${event.name}`
+        .replace(/,\s*,/g, ",")
+        .replace(/^,|,$/g, "");
 
     // Obtener la URL base del dominio
     const baseUrl =
@@ -74,23 +76,13 @@ export async function generateMetadata({
         ? "https://agricalendar.net"
         : "http://localhost:3000");
 
-    // Debug: log para verificar qué URL se está usando
-    console.log("🔍 Meta debug:", {
-      NODE_ENV: process.env.NODE_ENV,
-      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-      baseUrl: baseUrl,
-      rawImage: (event as any).ogImage || event.image,
-    });
-
     // Procesar la imagen para URL absoluta
     const rawImage = (event as any).ogImage || event.image;
     const absoluteImageUrl = rawImage
       ? rawImage.startsWith("http")
         ? rawImage
-        : `${baseUrl}/uploads/${rawImage}`
+        : `${baseUrl}/images/eventos/${rawImage}`
       : null;
-
-    console.log("🖼️ Image URL result:", absoluteImageUrl);
 
     const eventUrl = `${baseUrl}/${resolvedParams.lang}/${resolvedParams.route}/${resolvedParams.slug}`;
 
@@ -98,9 +90,6 @@ export async function generateMetadata({
       title: `${seoTitle} | AgriCalendar`,
       description: seoDescription,
       keywords: seoKeywords,
-      authors: [{ name: "AgriCalendar" }],
-      creator: "AgriCalendar",
-      publisher: "AgriCalendar",
       alternates: {
         canonical: eventUrl,
         languages: {
@@ -135,33 +124,8 @@ export async function generateMetadata({
         title: seoTitle,
         description: seoDescription,
         images: absoluteImageUrl ? [absoluteImageUrl] : [],
-        creator: "@agricalendar",
       },
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-          "max-video-preview": -1,
-          "max-image-preview": "large",
-          "max-snippet": -1,
-        },
-      },
-      verification: {
-        google: "google-site-verification-code", // Agregar código real
-      },
-      other: {
-        "theme-color": "#10B981",
-        "application-name": "AgriCalendar",
-        "apple-mobile-web-app-title": "AgriCalendar",
-        "apple-mobile-web-app-capable": "yes",
-        "apple-mobile-web-app-status-bar-style": "default",
-        "format-detection": "telephone=no",
-        "mobile-web-app-capable": "yes",
-        "msapplication-TileColor": "#10B981",
-        "msapplication-tap-highlight": "no",
-      },
+      robots: "index, follow",
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
