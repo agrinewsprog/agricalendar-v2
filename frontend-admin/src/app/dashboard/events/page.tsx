@@ -22,6 +22,7 @@ import TranslationModal from "@/components/TranslationModal";
 import {
   createAdminRoute,
   createAdminRouteWithBasePath,
+  createPublicUrl,
   ADMIN_ROUTES,
   redirectToAdminRoute,
 } from "@/lib/adminRoutes";
@@ -200,8 +201,11 @@ export default function EventsPage() {
 
   // Función para ver evento (navegar a página de detalle)
   const handleViewEvent = (event: Event) => {
-    // Por ahora abrimos en nueva pestaña el calendario público
-    window.open(`http://localhost:3000/events/${event.slug}`, "_blank");
+    // Abrir evento en el frontend público usando la URL correcta según el ambiente
+    const publicEventUrl = createPublicUrl(
+      `/eventos/${event.slug || event.id}`
+    );
+    window.open(publicEventUrl, "_blank");
   };
 
   // Función para editar evento
