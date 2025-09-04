@@ -26,12 +26,19 @@ const corsOptions = {
   origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
     // Lista de orígenes permitidos
     const allowedOrigins = [
+      'https://agricalendar.net',
+      'https://agricalendar.net/admin',
       process.env.FRONTEND_URL || 'http://localhost:3000',
       process.env.ADMIN_URL || 'http://localhost:3001',
       'http://localhost:3000',
       'http://localhost:3001',
-      'http://localhost:3002', // Por si acaso
+      'http://localhost:3002',
     ];
+
+    // En producción, permitir requests sin origin (proxies reversos)
+    if (!origin && process.env.NODE_ENV === 'production') {
+      return callback(null, true);
+    }
 
     // En desarrollo, permitir requests sin origin (Postman, etc.)
     if (!origin && process.env.NODE_ENV === 'development') {
