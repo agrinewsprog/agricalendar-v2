@@ -96,12 +96,12 @@ export default function TranslationModal({
     if (!event) return;
 
     // Buscar traducción existente
-    const translation = event.translations.find(
+    const translation = event.translations?.find(
       (t) => t.language.code === languageCode
     );
 
     // Buscar metadatos SEO existentes
-    const seoData = event.seoMetadata.find(
+    const seoData = event.seoMetadata?.find(
       (s) => s.language.code === languageCode
     );
 
@@ -203,10 +203,15 @@ export default function TranslationModal({
 
   if (!isOpen || !event) return null;
 
-  const currentTranslation = event.translations.find(
-    (t) => t.language.code === selectedLanguage
+  // Debug logging
+  console.log("TranslationModal - selectedLanguage:", selectedLanguage);
+  console.log("TranslationModal - event.language:", event.language);
+  console.log("TranslationModal - event.translations:", event.translations);
+
+  const currentTranslation = event.translations?.find(
+    (t) => t.language?.code === selectedLanguage
   );
-  const isOriginalLanguage = selectedLanguage === event.language.code;
+  const isOriginalLanguage = selectedLanguage === event.language?.code;
   const isAutoTranslated = currentTranslation?.isAuto || false;
 
   return (
@@ -239,10 +244,10 @@ export default function TranslationModal({
             </h3>
             <div className="space-y-2">
               {SUPPORTED_LANGUAGES.map((lang) => {
-                const translation = event.translations.find(
-                  (t) => t.language.code === lang.code
+                const translation = event.translations?.find(
+                  (t) => t.language?.code === lang.code
                 );
-                const isOriginal = lang.code === event.language.code;
+                const isOriginal = lang.code === event.language?.code;
                 const hasTranslation = !!translation || isOriginal;
 
                 return (

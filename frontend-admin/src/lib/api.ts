@@ -265,6 +265,12 @@ export const eventsService = {
     return response.data
   },
 
+  // Método para obtener evento con todas las traducciones y metadatos SEO
+  async getEventWithTranslations(id: number): Promise<ApiResponse<Event>> {
+    const response = await api.get(`/events/${id}/translations`)
+    return response.data
+  },
+
   async getBySlug(slug: string, language?: string): Promise<ApiResponse<Event>> {
     const response = await api.get(`/events/slug/${slug}`, {
       params: language ? { language } : {}
@@ -426,6 +432,54 @@ export const translationsService = {
   async generateSlug(text: string, languageId: number): Promise<ApiResponse<{ slug: string }>> {
     const response = await api.post('/translations/generate-slug', { text, languageId })
     return response.data
+  },
+
+  // Crear o actualizar traducción por código de idioma
+  async saveTranslationByCode(
+    eventId: number,
+    languageCode: string,
+    data: CreateTranslationData
+  ): Promise<ApiResponse<EventTranslation>> {
+    const response = await api.post(`/events/${eventId}/translations/${languageCode}`, data)
+    return response.data
+  },
+
+  // Actualizar traducción por código de idioma
+  async updateTranslationByCode(
+    eventId: number,
+    languageCode: string,
+    data: CreateTranslationData
+  ): Promise<ApiResponse<EventTranslation>> {
+    const response = await api.put(`/events/${eventId}/translations/${languageCode}`, data)
+    return response.data
+  },
+
+  // Eliminar traducción por código de idioma
+  async deleteTranslationByCode(eventId: number, languageCode: string): Promise<ApiResponse> {
+    const response = await api.delete(`/events/${eventId}/translations/${languageCode}`)
+    return response.data
+  },
+
+  // Validar datos de traducción
+  validateTranslationData(data: CreateTranslationData): { isValid: boolean; errors: string[] } {
+    const errors: string[] = []
+
+    if (!data.title?.trim()) {
+      errors.push('El título es requerido')
+    }
+
+    if (!data.slug?.trim()) {
+      errors.push('El slug es requerido')
+    }
+
+    if (data.slug && !/^[a-z0-9-]+$/.test(data.slug)) {
+      errors.push('El slug solo puede contener letras minúsculas, números y guiones')
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    }
   }
 }
 

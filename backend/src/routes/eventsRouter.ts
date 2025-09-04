@@ -8,7 +8,9 @@ import {
   updateEventStatus,
   deleteEvent,
   updateEventTranslationById,
-  getEventTranslations
+  getEventTranslations,
+  saveEventTranslation,
+  deleteEventTranslation
 } from '../controllers/eventsController';
 import { authenticateToken } from '../middlewares/authMiddleware';
 import upload from '../middlewares/uploadMiddleware';
@@ -29,5 +31,8 @@ router.delete('/:id', authenticateToken, deleteEvent);
 // Rutas de traducciones
 router.get('/:id/translations', authenticateToken, getEventTranslations);
 router.put('/:id/translation/:language', authenticateToken, updateEventTranslationById);
+router.post('/:id/translations/:languageCode', authenticateToken, saveEventTranslation);
+router.put('/:id/translations/:languageCode', authenticateToken, saveEventTranslation);
+router.delete('/:id/translations/:languageCode', authenticateToken, deleteEventTranslation);
 
 export default router;

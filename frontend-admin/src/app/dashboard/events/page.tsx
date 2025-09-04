@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardLayout from "@/components/DashboardLayout";
-import { eventsService, type Event } from "@/lib/api";
+import { eventsService, translationsService, type Event } from "@/lib/api";
 import {
   Plus,
   Calendar,
@@ -277,8 +277,23 @@ export default function EventsPage() {
   };
 
   // Función para abrir modal de traducciones
-  const handleTranslateEvent = (event: Event) => {
-    setTranslationModal({ show: true, event });
+  const handleTranslateEvent = async (event: Event) => {
+    try {
+      setActionLoading(event.id);
+      // Obtener evento completo con traducciones y metadatos SEO
+      const response = await eventsService.getEventWithTranslations(event.id);
+
+      if (response.success && response.data) {
+        setTranslationModal({ show: true, event: response.data });
+      } else {
+        alert("Error al cargar datos del evento");
+      }
+    } catch (error) {
+      console.error("Error loading event for translation:", error);
+      alert("Error al cargar datos del evento");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   // Función para cerrar modal de traducciones
@@ -718,10 +733,61 @@ export default function EventsPage() {
             event={translationModal.event as any}
             isOpen={translationModal.show}
             onClose={handleCloseTranslationModal}
-            onSave={async () => {
-              // Recargar eventos para reflejar cambios
-              await loadEvents();
-              handleCloseTranslationModal();
+            onSave={async (
+              eventId: number,
+              languageCode: string,
+              data: any
+            ) => {
+              try {
+                // Transformar datos al formato esperado por el backend
+                const translationData = {
+                  name: data.name, // Usar name en lugar de title
+                  description: data.description || null,
+                  location: data.location || null,
+                  slug: data.slug,
+                  seoTitle: data.seoTitle || null,
+                  seoDescription: data.seoDescription || null,
+                  keywords: data.keywords || null,
+                };
+
+                // Guardar traducción usando fetch directamente
+                const response = await fetch(
+                  `http://localhost:5000/api/events/${eventId}/translations/${languageCode}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${localStorage.getItem(
+                        "admin_token"
+                      )}`,
+                    },
+                    body: JSON.stringify(translationData),
+                  }
+                );
+
+                const result = await response.json();
+
+                if (result.success) {
+                  // Mostrar mensaje de éxito
+                  alert("Traducción guardada exitosamente");
+
+                  // Recargar eventos para reflejar cambios
+                  await loadEvents();
+
+                  // Cerrar modal
+                  handleCloseTranslationModal();
+                } else {
+                  console.error("Backend error:", result);
+                  alert(
+                    `Error al guardar la traducción: ${
+                      result.message || "Error desconocido"
+                    }`
+                  );
+                }
+              } catch (error) {
+                console.error("Error saving translation:", error);
+                alert("Error al guardar la traducción");
+              }
             }}
           />
         )}
