@@ -32,7 +32,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3002,
-        NEXT_PUBLIC_API_URL: "https://agricalendar.net/api",
+        NEXT_PUBLIC_API_URL: "https://agricalendar.net/api/",
       },
       instances: 1,
       exec_mode: "fork",
@@ -47,7 +47,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3001,
-        NEXT_PUBLIC_API_URL: "https://agricalendar.net/api",
+        NEXT_PUBLIC_API_URL: "https://agricalendar.net/api/",
       },
       instances: 1,
       exec_mode: "fork",
