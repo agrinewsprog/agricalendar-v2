@@ -17,18 +17,24 @@ export const getAllEvents = async (req: Request, res: Response) => {
       endDate 
     } = req.query;
 
+    // Construir filtros
+    const whereClause = {
+      status: 'PUBLISHED' as any,
+      ...(tipo && { tipo: tipo as string }),
+      ...(region && { region: region as string }),
+      ...(startDate && { 
+        startDate: { gte: new Date(startDate as string) } 
+      }),
+      ...(endDate && { 
+        endDate: { lte: new Date(endDate as string) } 
+      }),
+    };
+
+    // Obtener total de eventos para paginación
+    const total = await prisma.event.count({ where: whereClause });
+
     const events = await prisma.event.findMany({
-      where: {
-        status: 'PUBLISHED',
-        ...(tipo && { tipo: tipo as string }),
-        ...(region && { region: region as string }),
-        ...(startDate && { 
-          startDate: { gte: new Date(startDate as string) } 
-        }),
-        ...(endDate && { 
-          endDate: { lte: new Date(endDate as string) } 
-        }),
-      },
+      where: whereClause,
       include: {
         language: true,
         especie: true,
@@ -56,7 +62,7 @@ export const getAllEvents = async (req: Request, res: Response) => {
       success: true,
       data: events,
       meta: {
-        total: events.length,
+        total,
         limit: parseInt(limit as string),
         offset: parseInt(offset as string),
         language
