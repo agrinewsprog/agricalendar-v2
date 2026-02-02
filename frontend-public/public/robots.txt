@@ -1,0 +1,22 @@
+# Robots.txt for AgriCalendar
+# https://agricalendar.net
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://agricalendar.net/sitemap.xml
+
+# Disallow admin and API routes (if any exposed)
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /dashboard/
+
+# Allow all other content
+Allow: /es/
+Allow: /en/
+Allow: /pt/
+Allow: /vi/
+Allow: /th/
+Allow: /id/

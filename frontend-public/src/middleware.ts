@@ -44,9 +44,15 @@ export function middleware(request: NextRequest) {
 
   const language = segments[0];
   
+  // Crear respuesta con header personalizado para el pathname
+  const response = NextResponse.next();
+  response.headers.set('x-pathname', pathname);
+  
   // Si es la página de inicio con idioma, mostrar directamente
   if (segments.length === 1) {
-    return NextResponse.rewrite(new URL(`/${language}`, request.url));
+    const rewriteResponse = NextResponse.rewrite(new URL(`/${language}`, request.url));
+    rewriteResponse.headers.set('x-pathname', pathname);
+    return rewriteResponse;
   }
 
   // Manejar rutas de eventos
@@ -57,11 +63,13 @@ export function middleware(request: NextRequest) {
     const eventRoutes = Object.values(ROUTE_MAPPINGS.eventos);
     if (eventRoutes.includes(route)) {
       // Reescribir a la estructura de carpetas de Next.js
-      return NextResponse.rewrite(new URL(`/${lang}/eventos/${slug}`, request.url));
+      const rewriteResponse = NextResponse.rewrite(new URL(`/${lang}/eventos/${slug}`, request.url));
+      rewriteResponse.headers.set('x-pathname', pathname);
+      return rewriteResponse;
     }
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import { LanguageProvider } from "@/context/useLanguage";
 import "./globals.css";
 
@@ -33,13 +34,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Obtener el idioma de la URL
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const langMatch = pathname.match(/^\/([a-z]{2})(\/|$)/);
+  const lang = langMatch ? langMatch[1] : "es";
+
   return (
-    <html lang="es">
+    <html lang={lang}>
       <head>
         {/* Google Tag Manager */}
         <Script

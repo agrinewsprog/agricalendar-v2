@@ -39,7 +39,7 @@ export async function generateMetadata({
   try {
     const response = await eventsService.getBySlug(
       resolvedParams.slug,
-      resolvedParams.lang
+      resolvedParams.lang,
     );
 
     if (!response.success || !response.data) {
@@ -136,7 +136,7 @@ export async function generateMetadata({
 
 // Generar datos estructurados JSON-LD para SEO
 function generateStructuredData(event: any, params: any) {
-  const eventUrl = `https://agricalendar.com/${params.lang}/${
+  const eventUrl = `https://agricalendar.net/${params.lang}/${
     LANGUAGE_ROUTES[params.lang] || "events"
   }/${params.slug}`;
 
@@ -160,11 +160,11 @@ function generateStructuredData(event: any, params: any) {
     organizer: {
       "@type": "Person",
       name: event.user.name,
-      url: `https://agricalendar.com/user/${event.user.username}`,
+      url: `https://agricalendar.net/user/${event.user.username}`,
     },
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    image: event.image || "https://agricalendar.com/default-event-image.jpg",
+    image: event.image || "https://agricalendar.net/default-event-image.jpg",
     offers: event.website
       ? {
           "@type": "Offer",
@@ -185,7 +185,7 @@ export default async function EventPage({ params }: EventPageProps) {
   try {
     const response = await eventsService.getBySlug(
       resolvedParams.slug,
-      resolvedParams.lang
+      resolvedParams.lang,
     );
     if (response.success && response.data) {
       structuredData = generateStructuredData(response.data, resolvedParams);
