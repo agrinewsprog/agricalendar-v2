@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Quality Pligets - CEVA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ceva-blue: #0066cc;
+            --ceva-dark-blue: #004499;
+            --ceva-light-blue: #e6f3ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--ceva-blue) !important;
+        }
+
+        .language-selector {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--ceva-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 68, 153, 0.8)), 
+                        url('https://images.unsplash.com/photo-1530587191325-3db32d826c18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-register {
+            background: #ffd700;
+            color: #333;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-register:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #f8f9fa;
+            padding: 5rem 0;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container h2 {
+            color: var(--ceva-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--ceva-blue);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+        }
+
+        .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--ceva-blue);
+            border-color: var(--ceva-blue);
+        }
+
+        .btn-submit {
+            background: var(--ceva-blue);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--ceva-dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .legal-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        /* Cards Section */
+        .cards-section {
+            background: linear-gradient(rgba(0, 102, 204, 0.9), rgba(0, 68, 153, 0.9)), 
+                        url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 5rem 0;
+            color: white;
+        }
+
+        .cards-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .card-custom {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #333;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-custom i {
+            font-size: 3rem;
+            color: var(--ceva-blue);
+            margin-bottom: 1rem;
+        }
+
+        .card-custom h4 {
+            color: var(--ceva-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .footer a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .form-container {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+            
+            .navbar-nav {
+                text-align: center;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/150x50/0066cc/ffffff?text=CEVA" alt="CEVA Logo">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sector-porcino">SECTOR PORCINO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">BLOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#recursos">RECURSOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">CONTÁCTANOS</a>
+                    </li>
+                </ul>
+                
+                <div class="dropdown">
+                    <a href="#" class="language-selector dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Español</a></li>
+                        <li><a class="dropdown-item" href="#">English</a></li>
+                        <li><a class="dropdown-item" href="#">Português</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1>CICLO DE WEBINARS GRATUITO</h1>
+                <h2>HIGH QUALITY PLIGETS</h2>
+                <h3>La importancia de un buen arranque</h3>
+                <p>
+                    Descubre estrategias clave para potenciar la salud, el crecimiento y la supervivencia de los lechones, 
+                    mejorando la productividad y el bienestar en tu granja, a través de videos explicativos y la experiencia 
+                    de técnicos expertos de CEVA, especializados en el sector porcino.
+                </p>
+                <button class="btn btn-register" onclick="scrollToForm()">
+                    REGÍSTRATE
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="registro">
+        <div class="container">
+            <div class="form-container">
+                <h2>Registro para Webinar</h2>
+                <form id="registrationForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nombre" class="form-label">Nombre *</label>
+                                <input type="text" class="form-control" id="nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apellido" class="form-label">Apellido *</label>
+                                <input type="text" class="form-control" id="apellido" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail *</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefono" class="form-label">Teléfono *</label>
+                        <input type="tel" class="form-control" id="telefono" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="puesto" class="form-label">Puesto de trabajo *</label>
+                        <select class="form-select" id="puesto" required>
+                            <option value="">Selecciona tu puesto</option>
+                            <option value="veterinario">Veterinario</option>
+                            <option value="productor">Productor</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="gerente">Gerente de granja</option>
+                            <option value="estudiante">Estudiante</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tipoGranja" class="form-label">Tipo de Granja *</label>
+                        <select class="form-select" id="tipoGranja" required>
+                            <option value="">Selecciona el tipo de granja</option>
+                            <option value="intensiva">Intensiva</option>
+                            <option value="extensiva">Extensiva</option>
+                            <option value="mixta">Mixta</option>
+                            <option value="organica">Orgánica</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="aceptoComunicacion" required>
+                        <label class="form-check-label" for="aceptoComunicacion">
+                            Acepto recibir comunicaciones de CEVA *
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-submit">
+                        REGISTRARME
+                    </button>
+                    
+                    <div class="legal-text">
+                        <p class="mb-0">
+                            Al registrarte, aceptas nuestros <a href="#" style="color: var(--ceva-blue);">Términos y Condiciones</a> 
+                            y <a href="#" style="color: var(--ceva-blue);">Política de Privacidad</a>. 
+                            Tus datos serán utilizados únicamente para proporcionarte información relevante sobre nuestros productos y servicios.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards-section">
+        <div class="container">
+            <h2>Beneficios del Webinar</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom">
+                        <div class="text-center">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Expertise Técnico</h4>
+                            <p>Aprende de veterinarios y técnicos especializados con años de experiencia en el sector porcino.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom">
+                        <div class="text-center">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Mejora la Productividad</h4>
+                            <p>Implementa estrategias probadas que aumentarán la supervivencia y crecimiento de tus lechones.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-custom">
+                        <div class="text-center">
+                            <i class="fas fa-heart"></i>
+                            <h4>Bienestar Animal</h4>
+                            <p>Conoce las mejores prácticas para garantizar el bienestar y la salud de tus animales.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 col-md-6">
+                    <div class="card-custom">
+                        <div class="text-center">
+                            <i class="fas fa-video"></i>
+                            <h4>Contenido Multimedia</h4>
+                            <p>Disfruta de videos explicativos de alta calidad y material educativo descargable para tu consulta posterior.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 col-md-6">
+                    <div class="card-custom">
+                        <div class="text-center">
+                            <i class="fas fa-users"></i>
+                            <h4>Networking</h4>
+                            <p>Conecta con otros profesionales del sector y comparte experiencias en un ambiente colaborativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <p class="mb-0">&copy; CEVA 2025</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <a href="#">Aviso Legal</a>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="#">Política de Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth scroll to form
+        function scrollToForm() {
+            document.getElementById('registro').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                puesto: document.getElementById('puesto').value,
+                tipoGranja: document.getElementById('tipoGranja').value,
+                aceptoComunicacion: document.getElementById('aceptoComunicacion').checked
+            };
+            
+            // Simple validation
+            if (!formData.aceptoComunicacion) {
+                alert('Debes aceptar recibir comunicaciones para continuar.');
+                return;
+            }
+            
+            // Here you would normally send the data to your server
+            console.log('Form data:', formData);
+            alert('¡Registro exitoso! Te contactaremos pronto con los detalles del webinar.');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some animation on scroll
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.card-custom');
+            const windowHeight = window.innerHeight;
+            
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                
+                if (cardTop < windowHeight - 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Initialize card animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card-custom');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+            });
+        });
+    </script>
+</body>
+</html>
