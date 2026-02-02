@@ -19,7 +19,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://agricalendar.ne
 async function getEvents() {
   try {
     const response = await fetch(`${API_BASE_URL}/events?limit=1000`, {
-      cache: 'no-store', // No cachear para que siempre obtenga los últimos eventos
+      next: { revalidate: 3600 }, // Revalidar cada hora (3600 segundos)
     });
     
     if (!response.ok) {
