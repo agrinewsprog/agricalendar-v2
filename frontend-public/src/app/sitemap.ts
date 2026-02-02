@@ -13,21 +13,22 @@ const LANGUAGE_ROUTES: Record<string, string> = {
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://agricalendar.net';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://agricalendar.net/api';
 
 // Función para obtener eventos desde la API
 async function getEvents() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-    const response = await fetch(`${apiUrl}/events?limit=1000`, {
-      next: { revalidate: 3600 }, // Revalidar cada hora
+    const response = await fetch(`${API_BASE_URL}/events?limit=1000`, {
+      cache: 'no-store', // No cachear para que siempre obtenga los últimos eventos
     });
     
     if (!response.ok) {
-      console.error('Error fetching events for sitemap');
+      console.error(`Error fetching events for sitemap: ${response.status} ${response.statusText}`);
       return [];
     }
     
     const data = await response.json();
+    console.log(`Sitemap: Found ${data.data?.length || 0} events`);
     return data.data || [];
   } catch (error) {
     console.error('Error in sitemap generation:', error);
