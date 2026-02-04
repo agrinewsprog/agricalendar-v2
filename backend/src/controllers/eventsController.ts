@@ -53,7 +53,7 @@ export const getAllEvents = async (req: Request, res: Response) => {
           }
         }
       },
-      orderBy: { startDate: 'asc' },
+      orderBy: { createdAt: 'desc' },
       take: parseInt(limit as string),
       skip: parseInt(offset as string),
     });

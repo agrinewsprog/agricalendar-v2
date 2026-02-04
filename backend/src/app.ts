@@ -11,6 +11,7 @@ import languagesRouter from './routes/languagesRouter';
 import authRouter from './routes/authRouter';
 import adminRouter from './routes/adminRouter';
 import speciesRouter from './routes/speciesRouter';
+import usersRouter from './routes/usersRouter';
 
 dotenv.config();
 
@@ -81,6 +82,7 @@ app.use('/api/events', eventsRouter);
 app.use('/api/languages', languagesRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/species', speciesRouter);
+app.use('/api/users', usersRouter);
 
 // 404 handler
 app.use('*', (req, res) => {
