@@ -220,6 +220,49 @@ export const authService = {
   }
 }
 
+// === USERS SERVICES ===
+
+export const usersService = {
+  async getAllUsers(): Promise<ApiResponse<AdminUser[]>> {
+    const response = await api.get('/users')
+    return response.data
+  },
+
+  async getUserById(id: number): Promise<ApiResponse<AdminUser>> {
+    const response = await api.get(`/users/${id}`)
+    return response.data
+  },
+
+  async createUser(userData: {
+    name: string
+    username: string
+    email: string
+    password: string
+    role?: 'SUPER_ADMIN' | 'ADMIN' | 'EDITOR' | 'VIEWER'
+    state?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
+  }): Promise<ApiResponse<AdminUser>> {
+    const response = await api.post('/users', userData)
+    return response.data
+  },
+
+  async updateUser(id: number, userData: {
+    name?: string
+    username?: string
+    email?: string
+    password?: string
+    role?: 'SUPER_ADMIN' | 'ADMIN' | 'EDITOR' | 'VIEWER'
+    state?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
+  }): Promise<ApiResponse<AdminUser>> {
+    const response = await api.put(`/users/${id}`, userData)
+    return response.data
+  },
+
+  async deleteUser(id: number): Promise<ApiResponse> {
+    const response = await api.delete(`/users/${id}`)
+    return response.data
+  }
+}
+
 // === EVENTS SERVICES ===
 
 export const eventsService = {
